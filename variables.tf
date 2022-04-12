@@ -144,6 +144,7 @@ variable "timeouts" {
 variable "table_item_hash_key" {
   type        = string
   description = "(Required) Hash key to use for lookups and identification of the item"
+  default     = null
 }
 
 variable "item_range_key" {
@@ -155,4 +156,5 @@ variable "item_range_key" {
 variable "table_item" {
   type        = string
   description = "(Required) JSON representation of a map of attribute name/value pairs, one for each attribute. Only the primary key attributes are required; you can optionally provide other attribute name-value pairs for the item."
+  default     = null
 }

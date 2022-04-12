@@ -61,4 +61,21 @@ module "ppr_dynamodb_table" {
   replica = {
     region_name = "eu-west-2"
   }
+
+  table_item = <<ITEM
+{
+  "TestTableHashKey": {"S": "series"},
+  "one": {"N": "11111"},
+  "two": {"N": "22222"},
+  "three": {"N": "33333"},
+  "four": {"N": "44444"}
+},
+{
+  "TestTableHashKey": {"S": "series"},
+  "five": {"N": "55555"},
+  "six": {"N": "66666"},
+  "seven": {"N": "77777"},
+  "eight": {"N": "88888"}
+}
+ITEM
 }
