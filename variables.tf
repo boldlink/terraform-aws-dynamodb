@@ -50,14 +50,6 @@ variable "local_secondary_index" {
   default     = {}
 }
 
-/*
-variable "global_secondary_index" {
-  type        = object({})
-  description = "(Optional) Describe a GSI for the table; subject to the normal limits on the number of GSIs, projected attributes, etc."
-  default     = {}
-}
-*/
-
 variable "global_secondary_index" {
   type = list(object({
     hash_key           = string
@@ -144,7 +136,7 @@ variable "timeouts" {
 variable "table_item_hash_key" {
   type        = string
   description = "(Required) Hash key to use for lookups and identification of the item"
-  default     = null
+  default     = ""
 }
 
 variable "item_range_key" {
@@ -156,5 +148,11 @@ variable "item_range_key" {
 variable "table_item" {
   type        = string
   description = "(Required) JSON representation of a map of attribute name/value pairs, one for each attribute. Only the primary key attributes are required; you can optionally provide other attribute name-value pairs for the item."
-  default     = null
+  default     = ""
+}
+
+variable "create_dynamodb_item" {
+  type        = bool
+  description = "Specify whether to create dynamodb item"
+  default     = false
 }

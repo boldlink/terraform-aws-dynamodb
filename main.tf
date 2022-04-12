@@ -89,7 +89,7 @@ resource "aws_dynamodb_table" "main" {
 ### DynamoDB Item
 ############################
 resource "aws_dynamodb_table_item" "main" {
-  count      = var.table_item != null ? 1 : 0
+  count      = var.create_dynamodb_item ? 1 : 0
   table_name = aws_dynamodb_table.main.name
   hash_key   = var.table_item_hash_key == null ? aws_dynamodb_table.main.hash_key : var.table_item_hash_key
   range_key  = var.item_range_key

@@ -46,12 +46,13 @@ module "dynamodb_table" {
 }
 
 module "ppr_dynamodb_table" {
-  source           = "./.."
-  name             = "ppr-table"
-  hash_key         = "TestTableHashKey"
-  billing_mode     = "PAY_PER_REQUEST"
-  stream_enabled   = true
-  stream_view_type = "NEW_AND_OLD_IMAGES"
+  source               = "./.."
+  name                 = "ppr-table"
+  hash_key             = "TestTableHashKey"
+  billing_mode         = "PAY_PER_REQUEST"
+  stream_enabled       = true
+  stream_view_type     = "NEW_AND_OLD_IMAGES"
+  create_dynamodb_item = true
 
   attributes = [{
     name = "TestTableHashKey"
