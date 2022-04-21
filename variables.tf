@@ -9,6 +9,42 @@ variable "billing_mode" {
   default     = "PROVISIONED"
 }
 
+variable "enable_autoscaling" {
+  type        = bool
+  description = "Determines whether to enable autoscaling for the DynamoDB table"
+  default     = false
+}
+
+variable "dynamodb_table_max_read_capacity" {
+  type        = number
+  description = "The maximum number of read units for this table."
+  default     = 100
+}
+
+variable "dynamodb_table_min_read_capacity" {
+  type        = number
+  description = "The minimum number of read units for this table."
+  default     = 5
+}
+
+variable "dynamodb_table_max_write_capacity" {
+  type        = number
+  description = "The maximum number of write units for this table."
+  default     = 100
+}
+
+variable "dynamodb_table_min_write_capacity" {
+  type        = number
+  description = "The minimum number of write units for this table."
+  default     = 5
+}
+
+variable "read_target_value" {
+  type        = number
+  description = "The read target value for the scaling metric"
+  default     = 70
+}
+
 variable "hash_key" {
   type        = string
   description = "(Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an `attribute`"
