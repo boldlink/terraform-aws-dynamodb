@@ -15,6 +15,7 @@ resource "aws_dynamodb_table" "main" {
       type = attribute.value.type
     }
   }
+
   dynamic "ttl" {
     for_each = length(keys(var.ttl)) == 0 ? [] : [var.ttl]
     content {
@@ -22,6 +23,7 @@ resource "aws_dynamodb_table" "main" {
       attribute_name = ttl.value.attribute_name
     }
   }
+
   dynamic "local_secondary_index" {
     for_each = length(keys(var.local_secondary_index)) == 0 ? [] : [var.local_secondary_index]
     content {
@@ -31,6 +33,7 @@ resource "aws_dynamodb_table" "main" {
       non_key_attributes = lookup(local_secondary_index.value, "non_key_attributes", null)
     }
   }
+
   dynamic "global_secondary_index" {
     for_each = var.global_secondary_index
     content {
@@ -43,12 +46,14 @@ resource "aws_dynamodb_table" "main" {
       non_key_attributes = lookup(global_secondary_index.value, "non_key_attributes", null)
     }
   }
+
   dynamic "point_in_time_recovery" {
     for_each = length(keys(var.point_in_time_recovery)) == 0 ? [] : [var.point_in_time_recovery]
     content {
       enabled = point_in_time_recovery.value.enabled
     }
   }
+
   dynamic "replica" {
     for_each = length(keys(var.replica)) == 0 ? [] : [var.replica]
     content {
@@ -61,11 +66,12 @@ resource "aws_dynamodb_table" "main" {
   restore_date_time      = var.restore_date_time
   stream_enabled         = var.stream_enabled
   stream_view_type       = var.stream_view_type
+
   dynamic "server_side_encryption" {
     for_each = length(keys(var.server_side_encryption)) == 0 ? [] : [var.server_side_encryption]
     content {
       enabled     = server_side_encryption.value.enabled
-      kms_key_arn = lookup(server_side_encryption.value, "kms_key_arn", "alias/aws/dynamodb")
+      kms_key_arn = lookup(server_side_encryption.value, "kms_key_arn", null)
     }
   }
   timeouts {
@@ -82,11 +88,10 @@ resource "aws_dynamodb_table" "main" {
       write_capacity
     ]
   }
-
 }
 
 ######################################
-### Auto scaling
+### Table Auto scaling
 ######################################
 resource "aws_appautoscaling_target" "dynamodb_table_read_target" {
   count              = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? 1 : 0
@@ -94,15 +99,6 @@ resource "aws_appautoscaling_target" "dynamodb_table_read_target" {
   min_capacity       = var.dynamodb_table_min_read_capacity
   resource_id        = "table/${aws_dynamodb_table.main.name}"
   scalable_dimension = "dynamodb:table:ReadCapacityUnits"
-  service_namespace  = "dynamodb"
-}
-
-resource "aws_appautoscaling_target" "dynamodb_table_write_target" {
-  count              = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? 1 : 0
-  max_capacity       = var.dynamodb_table_max_write_capacity
-  min_capacity       = var.dynamodb_table_min_write_capacity
-  resource_id        = "table/${aws_dynamodb_table.main.name}"
-  scalable_dimension = "dynamodb:table:WriteCapacityUnits"
   service_namespace  = "dynamodb"
 }
 
@@ -118,8 +114,102 @@ resource "aws_appautoscaling_policy" "dynamodb_table_read_policy" {
     predefined_metric_specification {
       predefined_metric_type = "DynamoDBReadCapacityUtilization"
     }
+    scale_in_cooldown  = lookup(var.autoscaling_read, "scale_in_cooldown", var.autoscaling_defaults["scale_in_cooldown"])
+    scale_out_cooldown = lookup(var.autoscaling_read, "scale_out_cooldown", var.autoscaling_defaults["scale_out_cooldown"])
+    target_value       = lookup(var.autoscaling_read, "target_value", var.autoscaling_defaults["target_value"])
+  }
+}
 
-    target_value = var.read_target_value
+resource "aws_appautoscaling_target" "dynamodb_table_write_target" {
+  count              = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? 1 : 0
+  max_capacity       = var.dynamodb_table_max_write_capacity
+  min_capacity       = var.dynamodb_table_min_write_capacity
+  resource_id        = "table/${aws_dynamodb_table.main.name}"
+  scalable_dimension = "dynamodb:table:WriteCapacityUnits"
+  service_namespace  = "dynamodb"
+}
+
+resource "aws_appautoscaling_policy" "table_write_policy" {
+  count = var.billing_mode == "PROVISIONED" && var.enable_autoscaling && length(var.autoscaling_write) > 0 ? 1 : 0
+
+  name               = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.dynamodb_table_write_target[0].resource_id}"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.dynamodb_table_write_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.dynamodb_table_write_target[0].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.dynamodb_table_write_target[0].service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "DynamoDBWriteCapacityUtilization"
+    }
+
+    scale_in_cooldown  = lookup(var.autoscaling_write, "scale_in_cooldown", var.autoscaling_defaults["scale_in_cooldown"])
+    scale_out_cooldown = lookup(var.autoscaling_write, "scale_out_cooldown", var.autoscaling_defaults["scale_out_cooldown"])
+    target_value       = lookup(var.autoscaling_write, "target_value", var.autoscaling_defaults["target_value"])
+  }
+}
+
+######################################
+### Index Auto scaling
+######################################
+
+resource "aws_appautoscaling_target" "index_read" {
+  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
+
+  max_capacity       = try(each.value.read_max_capacity, null)
+  min_capacity       = try(each.value.read_min_capacity, null)
+  resource_id        = "table/${aws_dynamodb_table.main.name}/index/${each.key}"
+  scalable_dimension = "dynamodb:index:ReadCapacityUnits"
+  service_namespace  = "dynamodb"
+}
+
+resource "aws_appautoscaling_policy" "index_read_policy" {
+  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
+
+  name               = "DynamoDBReadCapacityUtilization:${aws_appautoscaling_target.index_read[each.key].resource_id}"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.index_read[each.key].resource_id
+  scalable_dimension = aws_appautoscaling_target.index_read[each.key].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.index_read[each.key].service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "DynamoDBReadCapacityUtilization"
+    }
+
+    scale_in_cooldown  = merge(var.autoscaling_defaults, each.value)["scale_in_cooldown"]
+    scale_out_cooldown = merge(var.autoscaling_defaults, each.value)["scale_out_cooldown"]
+    target_value       = merge(var.autoscaling_defaults, each.value)["target_value"]
+  }
+}
+
+resource "aws_appautoscaling_target" "index_write" {
+  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
+
+  max_capacity       = try(each.value.write_max_capacity, null)
+  min_capacity       = try(each.value.write_min_capacity, null)
+  resource_id        = "table/${aws_dynamodb_table.main.name}/index/${each.key}"
+  scalable_dimension = "dynamodb:index:WriteCapacityUnits"
+  service_namespace  = "dynamodb"
+}
+
+resource "aws_appautoscaling_policy" "index_write_policy" {
+  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
+
+  name               = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.index_write[each.key].resource_id}"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.index_write[each.key].resource_id
+  scalable_dimension = aws_appautoscaling_target.index_write[each.key].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.index_write[each.key].service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "DynamoDBWriteCapacityUtilization"
+    }
+
+    scale_in_cooldown  = merge(var.autoscaling_defaults, each.value)["scale_in_cooldown"]
+    scale_out_cooldown = merge(var.autoscaling_defaults, each.value)["scale_out_cooldown"]
+    target_value       = merge(var.autoscaling_defaults, each.value)["target_value"]
   }
 }
 

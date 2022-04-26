@@ -13,8 +13,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_dynamodb_table"></a> [dynamodb\_table](#module\_dynamodb\_table) | ./.. | n/a |
-| <a name="module_ppr_dynamodb_table"></a> [ppr\_dynamodb\_table](#module\_ppr\_dynamodb\_table) | ./.. | n/a |
+| <a name="module_dynamodb_table"></a> [dynamodb\_table](#module\_dynamodb\_table) | boldlink/dynamodb/aws | n/a |
 
 ## Resources
 
@@ -26,5 +25,7 @@ No inputs.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_outputs"></a> [outputs](#output\_outputs) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

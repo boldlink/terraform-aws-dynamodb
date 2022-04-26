@@ -1,10 +1,10 @@
 module "dynamodb_table" {
-  source             = "./.."
+  source             = "boldlink/dynamodb/aws"
   name               = "GameScores"
   billing_mode       = "PROVISIONED"
   enable_autoscaling = true
-  read_capacity      = 100
-  write_capacity     = 100
+  read_capacity      = 3
+  write_capacity     = 4
   hash_key           = "UserId"
   range_key          = "GameTitle"
 
@@ -24,8 +24,8 @@ module "dynamodb_table" {
   ]
 
   ttl = {
-    attribute_name = "TimeToExist"
-    enabled        = false
+    attribute_name = "TopScore"
+    enabled        = true
   }
 
   global_secondary_index = [
@@ -46,22 +46,8 @@ module "dynamodb_table" {
   }
 }
 
-module "ppr_dynamodb_table" {
-  source           = "./.."
-  name             = "ppr-table"
-  hash_key         = "TestTableHashKey"
-  billing_mode     = "PAY_PER_REQUEST"
-  stream_enabled   = true
-  stream_view_type = "NEW_AND_OLD_IMAGES"
-
-  attributes = [
-    {
-      name = "TestTableHashKey"
-      type = "S"
-    }
+output "outputs" {
+  value = [
+    module.dynamodb_table,
   ]
-
-  replica = {
-    region_name = "eu-west-2"
-  }
 }
