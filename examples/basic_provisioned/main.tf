@@ -33,8 +33,8 @@ module "dynamodb_table" {
       name               = "GameTitleIndex"
       hash_key           = "GameTitle"
       range_key          = "TopScore"
-      write_capacity     = 10
-      read_capacity      = 10
+      write_capacity     = 4
+      read_capacity      = 3
       projection_type    = "INCLUDE"
       non_key_attributes = ["UserId"]
     }

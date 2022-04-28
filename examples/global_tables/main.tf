@@ -14,9 +14,9 @@ locals {
   }
 }
 
-################################################################################
+#########################
 # Supporting Resources
-################################################################################
+#########################
 
 resource "random_pet" "this" {
   length = 2
@@ -34,9 +34,10 @@ resource "aws_kms_key" "secondary" {
   tags        = local.tags
 }
 
-####################
-###DDB Table
-####################
+###########################################################################################################
+### DDB Table
+### [Has an issue](https://github.com/aws/aws-cdk/issues/11346) with global table with `PROVISIONED` mode
+###########################################################################################################
 module "dynamodb_table" {
   source             = "boldlink/dynamodb/aws"
   name               = "GameScores"
@@ -70,8 +71,8 @@ module "dynamodb_table" {
       name               = "GameTitleIndex"
       hash_key           = "GameTitle"
       range_key          = "TopScore"
-      write_capacity     = 10
-      read_capacity      = 10
+      write_capacity     = 4
+      read_capacity      = 4
       projection_type    = "INCLUDE"
       non_key_attributes = ["UserId"]
     }
