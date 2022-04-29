@@ -8,30 +8,33 @@ provider "aws" {
 }
 
 locals {
-  tags = {
-    Name        = "global-ddb-tables"
-    Environment = "staging"
-  }
+  name_prefix = "GameScores"
 }
 
 #########################
 # Supporting Resources
 #########################
 
-resource "random_pet" "this" {
+resource "random_pet" "main" {
   length = 2
 }
 
 resource "aws_kms_key" "primary" {
   description = "CMK for primary region"
-  tags        = local.tags
+  tags = {
+    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Environment = "dev"
+  }
 }
 
 resource "aws_kms_key" "secondary" {
   provider = aws.euwest2
 
   description = "CMK for secondary region"
-  tags        = local.tags
+  tags = {
+    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Environment = "dev"
+  }
 }
 
 ###########################################################################################################
@@ -39,12 +42,11 @@ resource "aws_kms_key" "secondary" {
 ### [Has an issue](https://github.com/aws/aws-cdk/issues/11346) with global table with `PROVISIONED` mode
 ###########################################################################################################
 module "dynamodb_table" {
-  source             = "boldlink/dynamodb/aws"
-  name               = "GameScores"
-  billing_mode       = "PAY_PER_REQUEST"
-  enable_autoscaling = true
-  hash_key           = "UserId"
-  range_key          = "GameTitle"
+  source       = "boldlink/dynamodb/aws"
+  name         = "${local.name_prefix}-${random_pet.main.id}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "UserId"
+  range_key    = "GameTitle"
 
   attributes = [
     {
@@ -61,11 +63,6 @@ module "dynamodb_table" {
     }
   ]
 
-  ttl = {
-    attribute_name = "TopScore"
-    enabled        = true
-  }
-
   global_secondary_index = [
     {
       name               = "GameTitleIndex"
@@ -78,17 +75,17 @@ module "dynamodb_table" {
     }
   ]
 
-  server_side_encryption = {
-    enabled     = true
-    kms_key_arn = aws_kms_key.primary.arn
-  }
+  sse_kms_key_arn = aws_kms_key.primary.arn
 
   replica = {
     region_name = "eu-west-2"
     kms_key_arn = aws_kms_key.secondary.arn
   }
 
-  tags = local.tags
+  tags = {
+    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Environment = "dev"
+  }
 }
 
 output "outputs" {

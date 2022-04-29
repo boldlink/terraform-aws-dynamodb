@@ -1,6 +1,14 @@
+locals {
+  name_prefix = "GameScores"
+}
+
+resource "random_pet" "main" {
+  length = 2
+}
+
 module "dynamodb_table" {
   source             = "boldlink/dynamodb/aws"
-  name               = "GameScores"
+  name               = "${local.name_prefix}-${random_pet.main.id}"
   billing_mode       = "PROVISIONED"
   enable_autoscaling = true
   read_capacity      = 3
@@ -23,25 +31,20 @@ module "dynamodb_table" {
     }
   ]
 
-  ttl = {
-    attribute_name = "TopScore"
-    enabled        = true
-  }
-
   global_secondary_index = [
     {
       name               = "GameTitleIndex"
       hash_key           = "GameTitle"
       range_key          = "TopScore"
-      write_capacity     = 4
-      read_capacity      = 3
+      write_capacity     = 7
+      read_capacity      = 5
       projection_type    = "INCLUDE"
       non_key_attributes = ["UserId"]
     }
   ]
 
   tags = {
-    Name        = "sample-dynamodb-table"
+    Name        = "${local.name_prefix}-${random_pet.main.id}"
     Environment = "dev"
   }
 }

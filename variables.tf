@@ -72,6 +72,36 @@ variable "hash_key" {
   description = "(Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an `attribute`"
 }
 
+variable "create_sse_kms_key" {
+  type        = bool
+  description = "Specify whether you want to create the sse_kms_key using this module."
+  default     = false
+}
+
+variable "key_deletion_window" {
+  type        = number
+  description = "The waiting period, specified in number of days. Must be between `7` and `30`inclusive."
+  default     = 7
+}
+
+variable "point_in_time_recovery_enabled" {
+  type        = bool
+  description = "Specify whether to enable point-in-time-recovery for the dynamodb table."
+  default     = false
+}
+
+variable "sse_enabled" {
+  type        = bool
+  description = "Specify whether server-side encryption is enabled for the dynamodb table."
+  default     = true
+}
+
+variable "sse_kms_key_arn" {
+  type        = string
+  description = "Provide the ARN for the KMS key to use for DDB server-side encryption."
+  default     = null
+}
+
 variable "range_key" {
   type        = string
   description = "(Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an `attribute`"
@@ -122,12 +152,6 @@ variable "global_secondary_index" {
   description = "Additional global secondary indexes in the form of a list of mapped values"
 }
 
-variable "point_in_time_recovery" {
-  type        = map(string)
-  description = "(Optional) Enable point-in-time recovery"
-  default     = {}
-}
-
 variable "replica" {
   type        = map(string)
   description = "(Optional) Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations."
@@ -162,12 +186,6 @@ variable "stream_view_type" {
   type        = string
   description = "(Optional) When an item in the table is modified, StreamViewType determines what information is written to the table's stream. Valid values are `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`."
   default     = null
-}
-
-variable "server_side_encryption" {
-  type        = map(string)
-  description = "(Optional) Encryption at rest options. AWS DynamoDB tables are automatically encrypted at rest with an AWS owned Customer Master Key if this argument isn't specified."
-  default     = {}
 }
 
 variable "table_class" {

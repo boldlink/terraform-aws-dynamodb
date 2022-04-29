@@ -1,13 +1,21 @@
 ############################
 ### DynamoDB table
 ############################
+locals {
+  name                = var.name
+  account_id          = data.aws_caller_identity.current.account_id
+  partition           = data.aws_partition.current.partition
+  default_ddb_kms_key = data.aws_kms_key.default.arn
+}
+
 resource "aws_dynamodb_table" "main" {
-  name           = var.name
+  name           = local.name
   billing_mode   = var.billing_mode
   hash_key       = var.hash_key
   range_key      = var.range_key
-  write_capacity = var.billing_mode == "PAY_PER_REQUEST" ? null : var.write_capacity
-  read_capacity  = var.billing_mode == "PAY_PER_REQUEST" ? null : var.read_capacity
+  write_capacity = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
+  read_capacity  = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+
   dynamic "attribute" {
     for_each = var.attributes
     content {
@@ -47,11 +55,8 @@ resource "aws_dynamodb_table" "main" {
     }
   }
 
-  dynamic "point_in_time_recovery" {
-    for_each = length(keys(var.point_in_time_recovery)) == 0 ? [] : [var.point_in_time_recovery]
-    content {
-      enabled = point_in_time_recovery.value.enabled
-    }
+  point_in_time_recovery {
+    enabled = var.point_in_time_recovery_enabled
   }
 
   dynamic "replica" {
@@ -61,24 +66,30 @@ resource "aws_dynamodb_table" "main" {
       kms_key_arn = lookup(replica.value, "kms_key_arn", null)
     }
   }
+
   restore_source_name    = var.restore_source_name
   restore_to_latest_time = var.restore_to_latest_time
   restore_date_time      = var.restore_date_time
   stream_enabled         = var.stream_enabled
   stream_view_type       = var.stream_view_type
 
-  dynamic "server_side_encryption" {
-    for_each = length(keys(var.server_side_encryption)) == 0 ? [] : [var.server_side_encryption]
-    content {
-      enabled     = server_side_encryption.value.enabled
-      kms_key_arn = lookup(server_side_encryption.value, "kms_key_arn", null)
-    }
+  server_side_encryption {
+    enabled     = var.sse_enabled
+    kms_key_arn = var.sse_enabled && var.sse_kms_key_arn == null && var.create_sse_kms_key == false ? local.default_ddb_kms_key : (var.sse_enabled && var.sse_kms_key_arn == null && var.create_sse_kms_key ? try(aws_kms_key.ddbsse[0].arn, null) : (var.sse_enabled && var.sse_kms_key_arn != null && var.create_sse_kms_key == false ? var.sse_kms_key_arn : null))
   }
+
+  ## Interpretation of above:
+  ## Use default kms key if; sse is enabled, sse-kms-key-arn not provided and key creation not specified, i.e condition is false
+  ## Create key if; sse is enabled, sse-kms-key-arn not provided and key creation is specified, i.e condition is true
+  ## Use provided key if; sse is enabled, sse-kms-key-arn value is provided and key creation is not specified, i.e condition is false
+  ## Otherwise the value is `null`
+
   timeouts {
     create = lookup(var.timeouts, "create", "10m")
     update = lookup(var.timeouts, "update", "60m")
     delete = lookup(var.timeouts, "delete", "10m")
   }
+
   table_class = var.table_class
   tags        = var.tags
 
@@ -88,6 +99,19 @@ resource "aws_dynamodb_table" "main" {
       write_capacity
     ]
   }
+}
+
+resource "aws_kms_key" "ddbsse" {
+  count                   = var.create_sse_kms_key ? 1 : 0
+  description             = "KMS Key for ${local.name} DynamoDB SSE"
+  policy                  = data.aws_iam_policy_document.main.json
+  deletion_window_in_days = var.key_deletion_window
+}
+
+resource "aws_kms_alias" "ddbsse" {
+  count         = var.create_sse_kms_key ? 1 : 0
+  name          = "alias/dynamodb/${local.name}"
+  target_key_id = aws_kms_key.ddbsse[0].key_id
 }
 
 ######################################
@@ -130,8 +154,7 @@ resource "aws_appautoscaling_target" "dynamodb_table_write_target" {
 }
 
 resource "aws_appautoscaling_policy" "table_write_policy" {
-  count = var.billing_mode == "PROVISIONED" && var.enable_autoscaling && length(var.autoscaling_write) > 0 ? 1 : 0
-
+  count              = var.billing_mode == "PROVISIONED" && var.enable_autoscaling && length(var.autoscaling_write) > 0 ? 1 : 0
   name               = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.dynamodb_table_write_target[0].resource_id}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.dynamodb_table_write_target[0].resource_id
@@ -154,8 +177,7 @@ resource "aws_appautoscaling_policy" "table_write_policy" {
 ######################################
 
 resource "aws_appautoscaling_target" "index_read" {
-  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
-
+  for_each           = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
   max_capacity       = try(each.value.read_max_capacity, null)
   min_capacity       = try(each.value.read_min_capacity, null)
   resource_id        = "table/${aws_dynamodb_table.main.name}/index/${each.key}"
@@ -164,8 +186,7 @@ resource "aws_appautoscaling_target" "index_read" {
 }
 
 resource "aws_appautoscaling_policy" "index_read_policy" {
-  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
-
+  for_each           = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
   name               = "DynamoDBReadCapacityUtilization:${aws_appautoscaling_target.index_read[each.key].resource_id}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.index_read[each.key].resource_id
@@ -184,8 +205,7 @@ resource "aws_appautoscaling_policy" "index_read_policy" {
 }
 
 resource "aws_appautoscaling_target" "index_write" {
-  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
-
+  for_each           = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
   max_capacity       = try(each.value.write_max_capacity, null)
   min_capacity       = try(each.value.write_min_capacity, null)
   resource_id        = "table/${aws_dynamodb_table.main.name}/index/${each.key}"
@@ -194,8 +214,7 @@ resource "aws_appautoscaling_target" "index_write" {
 }
 
 resource "aws_appautoscaling_policy" "index_write_policy" {
-  for_each = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
-
+  for_each           = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
   name               = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.index_write[each.key].resource_id}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.index_write[each.key].resource_id

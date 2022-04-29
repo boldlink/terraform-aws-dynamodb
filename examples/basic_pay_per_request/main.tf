@@ -1,10 +1,18 @@
+locals {
+  name_prefix = "ProfessionalTitle"
+}
+
+resource "random_pet" "main" {
+  length = 2
+}
+
 module "ppr_dynamodb_table" {
   source             = "boldlink/dynamodb/aws"
-  name               = "GameScores"
+  name               = "${local.name_prefix}-${random_pet.main.id}"
   billing_mode       = "PAY_PER_REQUEST"
   enable_autoscaling = true
   hash_key           = "UserId"
-  range_key          = "GameTitle"
+  range_key          = "ProfessionalTitle"
 
   attributes = [
     {
@@ -12,25 +20,20 @@ module "ppr_dynamodb_table" {
       type = "S"
     },
     {
-      name = "GameTitle"
+      name = "ProfessionalTitle"
       type = "S"
     },
     {
-      name = "TopScore"
+      name = "SocialScore"
       type = "N"
     }
   ]
 
-  ttl = {
-    attribute_name = "TopScore"
-    enabled        = true
-  }
-
   global_secondary_index = [
     {
-      name               = "GameTitleIndex"
-      hash_key           = "GameTitle"
-      range_key          = "TopScore"
+      name               = "ProfessionalTitleIndex"
+      hash_key           = "ProfessionalTitle"
+      range_key          = "SocialScore"
       write_capacity     = 10
       read_capacity      = 10
       projection_type    = "INCLUDE"
@@ -39,7 +42,7 @@ module "ppr_dynamodb_table" {
   ]
 
   tags = {
-    Name        = "sample-dynamodb-table"
+    Name        = "${local.name_prefix}-${random_pet.main.id}"
     Environment = "dev"
   }
 }
