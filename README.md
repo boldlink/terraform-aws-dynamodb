@@ -1,5 +1,7 @@
 # AWS DynamoDB Terraform module
 
+[![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
+
 ## Description
 
 This terraform module creates a dynamodb table and items
