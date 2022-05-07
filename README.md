@@ -48,7 +48,6 @@ No modules.
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | (Required) List of nested attribute definitions. Only required for hash\_key and range\_key attributes. | `list(map(string))` | `[]` | no |
 | <a name="input_billing_mode"></a> [billing\_mode](#input\_billing\_mode) | (Optional) Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED` | `string` | `"PROVISIONED"` | no |
 | <a name="input_create_dynamodb_item"></a> [create\_dynamodb\_item](#input\_create\_dynamodb\_item) | Specify whether to create dynamodb item | `bool` | `false` | no |
-<<<<<<< HEAD
 | <a name="input_dynamodb_table_max_read_capacity"></a> [dynamodb\_table\_max\_read\_capacity](#input\_dynamodb\_table\_max\_read\_capacity) | The maximum number of read units for this table. | `number` | `100` | no |
 | <a name="input_dynamodb_table_max_write_capacity"></a> [dynamodb\_table\_max\_write\_capacity](#input\_dynamodb\_table\_max\_write\_capacity) | The maximum number of write units for this table. | `number` | `100` | no |
 | <a name="input_dynamodb_table_min_read_capacity"></a> [dynamodb\_table\_min\_read\_capacity](#input\_dynamodb\_table\_min\_read\_capacity) | The minimum number of read units for this table. | `number` | `5` | no |
@@ -62,7 +61,6 @@ No modules.
 | <a name="input_point_in_time_recovery"></a> [point\_in\_time\_recovery](#input\_point\_in\_time\_recovery) | (Optional) Enable point-in-time recovery | `map(string)` | `{}` | no |
 | <a name="input_range_key"></a> [range\_key](#input\_range\_key) | (Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an `attribute` | `string` | `null` | no |
 | <a name="input_read_capacity"></a> [read\_capacity](#input\_read\_capacity) | (Optional) The number of read units for this table. If the billing\_mode is `PROVISIONED`, this field is `required`. | `number` | `null` | no |
-<<<<<<< HEAD
 | <a name="input_read_target_value"></a> [read\_target\_value](#input\_read\_target\_value) | The read target value for the scaling metric | `number` | `70` | no |
 | <a name="input_replica"></a> [replica](#input\_replica) | (Optional) Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. | `map(string)` | `{}` | no |
 | <a name="input_restore_date_time"></a> [restore\_date\_time](#input\_restore\_date\_time) | (Optional) The time of the point-in-time recovery point to restore. | `string` | `null` | no |
