@@ -19,15 +19,15 @@ module "dynamodb_table" {
   ## For both read and write, these values are set like so to allow faster scale out and slow scale down
   ## Max and min_capacities: provisioned capacity that your table will allow. Cannot scale above/below these values.
   autoscaling_read = {
-    scale_in_cooldown  = 60
-    scale_out_cooldown = 180
+    scale_in_cooldown  = 180
+    scale_out_cooldown = 60
     target_value       = 50
     max_capacity       = 10
   }
 
   autoscaling_write = {
-    scale_in_cooldown  = 60
-    scale_out_cooldown = 180
+    scale_in_cooldown  = 180
+    scale_out_cooldown = 60
     target_value       = 50
     max_capacity       = 10
   }
