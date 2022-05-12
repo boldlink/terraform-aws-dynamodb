@@ -7,7 +7,8 @@ resource "random_pet" "main" {
 }
 
 module "autoscaled" {
-  source             = "boldlink/dynamodb/aws"
+  #source             = "boldlink/dynamodb/aws"
+  source             = "../../"
   name               = "${local.name_prefix}-${random_pet.main.id}"
   hash_key           = "id"
   range_key          = "title"

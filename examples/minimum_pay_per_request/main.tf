@@ -7,7 +7,8 @@ resource "random_pet" "main" {
 }
 
 module "ppr_dynamodb_table" {
-  source             = "boldlink/dynamodb/aws"
+  #source             = "boldlink/dynamodb/aws"
+  source             = "../../"
   name               = "${local.name_prefix}-${random_pet.main.id}"
   billing_mode       = "PAY_PER_REQUEST"
   enable_autoscaling = true

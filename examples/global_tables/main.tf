@@ -42,7 +42,8 @@ resource "aws_kms_key" "secondary" {
 ### [Has an issue](https://github.com/aws/aws-cdk/issues/11346) with global table with `PROVISIONED` mode
 ###########################################################################################################
 module "dynamodb_table" {
-  source       = "boldlink/dynamodb/aws"
+  #source       = "boldlink/dynamodb/aws"
+  source       = "../../"
   name         = "${local.name_prefix}-${random_pet.main.id}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "UserId"
