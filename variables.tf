@@ -11,7 +11,7 @@ variable "billing_mode" {
 
 variable "enable_autoscaling" {
   type        = bool
-  description = "Determines whether to enable autoscaling for the DynamoDB table"
+  description = "Determines whether to enable autoscaling for the DynamoDB table."
   default     = false
 }
 
@@ -40,7 +40,7 @@ variable "dynamodb_table_min_write_capacity" {
 }
 
 variable "autoscaling_defaults" {
-  description = "A map of default autoscaling settings"
+  description = "A map of default autoscaling settings."
   type        = map(string)
   default = {
     scale_in_cooldown  = 0

@@ -2,7 +2,7 @@
 
 <img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>
 
-# Example with DynamoDB provisioned billing mode configuration
+# Example with DynamoDB provisioned billing mode configuration.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
