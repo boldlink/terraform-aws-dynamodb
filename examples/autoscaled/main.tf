@@ -6,7 +6,7 @@ resource "random_pet" "main" {
   length = 2
 }
 
-module "dynamodb_table" {
+module "autoscaled" {
   source             = "boldlink/dynamodb/aws"
   name               = "${local.name_prefix}-${random_pet.main.id}"
   hash_key           = "id"
@@ -72,10 +72,4 @@ module "dynamodb_table" {
     Name        = "${local.name_prefix}-${random_pet.main.id}"
     Environment = "staging"
   }
-}
-
-output "outputs" {
-  value = [
-    module.dynamodb_table,
-  ]
 }

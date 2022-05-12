@@ -1,22 +1,84 @@
+[![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
+
+<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>
+
 # AWS DynamoDB Terraform module
 
 ## Description
 
-This terraform module creates a dynamodb table and items
+This terraform module creates a dynamodb table and item(s)
 
 Examples available [`here`](https://github.com/boldlink/terraform-aws-dynamodb/tree/main/examples)
 
+## Usage
+*NOTE*: These examples use the latest version of this module
+
+```hcl
+locals {
+  name_prefix = "LibraryPoints"
+}
+
+resource "random_pet" "main" {
+  length = 2
+}
+
+module "minimum" {
+  source             = "boldlink/dynamodb/aws"
+  name               = "${local.name_prefix}-${random_pet.main.id}"
+  billing_mode       = "PROVISIONED"
+  enable_autoscaling = true
+  read_capacity      = 3
+  write_capacity     = 4
+  hash_key           = "UserId"
+  range_key          = "BookTitle"
+
+  attributes = [
+    {
+      name = "UserId"
+      type = "S"
+    },
+    {
+      name = "BookTitle"
+      type = "S"
+    },
+    {
+      name = "HighestPoints"
+      type = "N"
+    }
+  ]
+
+  global_secondary_index = [
+    {
+      name               = "BookTitleIndex"
+      hash_key           = "BookTitle"
+      range_key          = "HighestPoints"
+      write_capacity     = 7
+      read_capacity      = 5
+      projection_type    = "INCLUDE"
+      non_key_attributes = ["UserId"]
+    }
+  ]
+
+  tags = {
+    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Environment = "dev"
+  }
+}
+```
 ## Documentation
 
 [Amazon DynamoDB Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
 
 [Terraform provider documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table)
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.1.0 |
 
 ## Providers
 
@@ -49,7 +111,6 @@ No modules.
 | [aws_kms_alias.aws_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
 | [aws_kms_key.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
@@ -103,3 +164,36 @@ No modules.
 | <a name="output_stream_label"></a> [stream\_label](#output\_stream\_label) | A timestamp, in ISO 8601 format, for this stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true` |
 | <a name="output_tags_all"></a> [tags\_all](#output\_tags\_all) | A map of tags assigned to the resource, including those inherited from the provider [default\_tags configuration block](https://registry.terraform.io/docs/providers/aws/index#default_tags-configuration-block). |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## Third party software
+This repository uses third party software:
+* [pre-commit](https://pre-commit.com/) - Used to help ensure code and documentation consistency
+  - *Installation on MacOS*  
+  - Install with `brew install pre-commit coreutils`  
+  - *Installation on Ubuntu 20.04*  
+  ```console  
+  sudo apt update  
+  sudo apt install -y unzip software-properties-common python3 python3-pip  
+  python3 -m pip install --upgrade pip  
+  pip3 install --no-cache-dir pre-commit  
+  ```
+  - Manually use with `pre-commit run`  
+* [terraform 0.13.7](https://releases.hashicorp.com/terraform/0.13.7/) For backwards compability we are using version 0.13.7 for testing making this the min version tested.
+* [terraform-docs](https://github.com/segmentio/terraform-docs) - Used to generate the [Inputs](#Inputs) and [Outputs](#Outputs) sections
+  - *Installation on MacOS*  
+  - Install with `brew install terraform-docs`  
+  - *Installation on Ubuntu 20.04*  
+  ```console
+  curl -L "$(curl -s https://api.github.com/repos/terraform-docs/terraform-docs/releases/latest | grep -o -E -m 1 "https://.+?-linux-amd64.tar.gz")" > terraform-docs.tgz && tar -xzf terraform-docs.tgz terraform-docs && rm terraform-docs.tgz && chmod +x terraform-docs && sudo mv terraform-docs /usr/bin/
+  ```
+  * Manually use via pre-commit
+* [tflint](https://github.com/terraform-linters/tflint) - Used to lint the Terraform code
+  - *Installation on MacOS*  
+  - Install with `brew install tflint`  
+  - *Installation on Ubuntu 20.04*  
+  ```console
+  curl -L "$(curl -s https://api.github.com/repos/terraform-linters/tflint/releases/latest | grep -o -E -m 1 "https://.+?_linux_amd64.zip")" > tflint.zip && unzip tflint.zip && rm tflint.zip && sudo mv tflint /usr/bin/
+  ```
+  * Manually use via pre-commit
+
+#### BOLDLink-SIG 2022

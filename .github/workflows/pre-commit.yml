@@ -1,0 +1,34 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        mkdir -p /home/runner/.local/bin
+        curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+        tar -xzf terraform-docs.tar.gz
+        chmod +x terraform-docs
+        mv terraform-docs /home/runner/.local/bin/terraform-docs
+    - run: |
+        curl -sSLo tflint_linux_amd64.zip https://github.com/terraform-linters/tflint/releases/download/v0.35.0/tflint_linux_amd64.zip
+        unzip tflint_linux_amd64.zip
+        chmod +x tflint
+        mv tflint /home/runner/.local/bin/tflint
+    - run: |
+        curl -sSLo terraform_0.13.7_linux_amd64.zip https://releases.hashicorp.com/terraform/0.13.7/terraform_0.13.7_linux_amd64.zip
+        unzip terraform_0.13.7_linux_amd64.zip
+        chmod +x terraform
+        # mv terr/home/runner/.local/bin/terraform
+        terraform-docs --version
+        tflint --version
+        terraform --version
+    - uses: actions/setup-python@v2
+    - run: pip install --upgrade pre-commit
+    - run: pre-commit run --all-files

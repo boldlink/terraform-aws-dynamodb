@@ -87,9 +87,3 @@ module "dynamodb_table" {
     Environment = "dev"
   }
 }
-
-output "outputs" {
-  value = [
-    module.dynamodb_table,
-  ]
-}

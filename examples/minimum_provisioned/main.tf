@@ -1,5 +1,5 @@
 locals {
-  name_prefix = "GameScores"
+  name_prefix = "LibraryPoints"
 }
 
 resource "random_pet" "main" {
@@ -14,7 +14,7 @@ module "dynamodb_table" {
   read_capacity      = 3
   write_capacity     = 4
   hash_key           = "UserId"
-  range_key          = "GameTitle"
+  range_key          = "BookTitle"
 
   attributes = [
     {
@@ -22,20 +22,20 @@ module "dynamodb_table" {
       type = "S"
     },
     {
-      name = "GameTitle"
+      name = "BookTitle"
       type = "S"
     },
     {
-      name = "TopScore"
+      name = "HighestPoints"
       type = "N"
     }
   ]
 
   global_secondary_index = [
     {
-      name               = "GameTitleIndex"
-      hash_key           = "GameTitle"
-      range_key          = "TopScore"
+      name               = "BookTitleIndex"
+      hash_key           = "BookTitle"
+      range_key          = "HighestPoints"
       write_capacity     = 7
       read_capacity      = 5
       projection_type    = "INCLUDE"
@@ -47,10 +47,4 @@ module "dynamodb_table" {
     Name        = "${local.name_prefix}-${random_pet.main.id}"
     Environment = "dev"
   }
-}
-
-output "outputs" {
-  value = [
-    module.dynamodb_table,
-  ]
 }

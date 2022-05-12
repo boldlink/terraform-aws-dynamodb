@@ -46,9 +46,3 @@ module "ppr_dynamodb_table" {
     Environment = "dev"
   }
 }
-
-output "outputs" {
-  value = [
-    module.ppr_dynamodb_table,
-  ]
-}

@@ -1,9 +1,17 @@
-# global_tables
+[![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
+
+<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>
+
+# Example with DynamoDB Global tables configuration
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.1.0 |
 
 ## Providers
 
@@ -35,5 +43,7 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_outputs"></a> [outputs](#output\_outputs) | n/a |
+| <a name="output_outputs"></a> [outputs](#output\_outputs) | Various output values for the dynamodb global tables |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+#### BOLDLink-SIG 2022

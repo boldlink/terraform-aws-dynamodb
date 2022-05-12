@@ -2,7 +2,7 @@
 
 <img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>
 
-# Example with DynamoDB Autoscaled configuration
+# Example with DynamoDB pay-per-request billing mode configuration
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -23,7 +23,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_autoscaled"></a> [autoscaled](#module\_autoscaled) | boldlink/dynamodb/aws | n/a |
+| <a name="module_ppr_dynamodb_table"></a> [ppr\_dynamodb\_table](#module\_ppr\_dynamodb\_table) | boldlink/dynamodb/aws | n/a |
 
 ## Resources
 
@@ -39,7 +39,7 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_outputs"></a> [outputs](#output\_outputs) | Various output values for autoscaled dynamodb module |
+| <a name="output_outputs"></a> [outputs](#output\_outputs) | Various output values for dynamodb table with pay-per-request billing mode |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 #### BOLDLink-SIG 2022
