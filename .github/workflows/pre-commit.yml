@@ -36,12 +36,18 @@ jobs:
   run-if-failed:
     runs-on: ubuntu-latest
     needs: [pre-commit]
-    if: always() && (needs.pre-commit.result == 'failure')
+    if: always() && (needs.build.result == 'failure')
     steps:
-    - uses: EndBug/add-and-commit@v9
-    - uses: actions/checkout@v2
-      with:
-        author_name: patrickmukumbu
-        message: 'NOSTORY: Commit from GitHub Actions pre-commit, added changed files'
-        pathspec_error_handling: ignore
-        push: true
+    - uses: actions/checkout@v2.3.4
+    - name: If needed, commit file changes to the pull request
+      env:
+        NEEDS_CONTEXT: ${{ toJSON(needs) }}
+    - run: |
+        git config --global user.name 'github_actions'
+        git config --global user.email 'boldlink@users.noreply.github.com'
+        git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/$GITHUB_REPOSITORY
+        git checkout $GITHUB_HEAD_REF
+        echo "$NEEDS_CONTEXT"
+        git commit -am "NOSTORY: Commit from GitHub Actions pre-commit, added changed files"
+        git push
+        echo "$NEEDS_CONTEXT"
