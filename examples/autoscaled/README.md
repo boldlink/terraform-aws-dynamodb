@@ -23,7 +23,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_autoscaled"></a> [autoscaled](#module\_autoscaled) | boldlink/dynamodb/aws | n/a |
+| <a name="module_autoscaled"></a> [autoscaled](#module\_autoscaled) | ../../ | n/a |
 
 ## Resources
 

@@ -23,7 +23,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ppr_dynamodb_table"></a> [ppr\_dynamodb\_table](#module\_ppr\_dynamodb\_table) | boldlink/dynamodb/aws | n/a |
+| <a name="module_ppr_dynamodb_table"></a> [ppr\_dynamodb\_table](#module\_ppr\_dynamodb\_table) | ../../ | n/a |
 
 ## Resources
 
