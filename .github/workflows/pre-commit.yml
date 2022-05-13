@@ -38,7 +38,7 @@ jobs:
     needs: [pre-commit]
     if: always() && (needs.build.result == 'failure')
     steps:
-    - uses: actions/checkout@v2.3.4
+    - uses: actions/checkout@v2
     - name: If needed, commit file changes to the pull request
       env:
         NEEDS_CONTEXT: ${{ toJSON(needs) }}
