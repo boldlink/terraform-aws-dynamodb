@@ -1,4 +1,4 @@
----
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
@@ -25,7 +25,7 @@ repos:
 
    # Detect past or present hardcoded secrets like passwords, api keys, and tokens. NOTE: The current version of gitleaks has passwords detection disabled/not working
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.1.3
+    rev: v8.8.4
     hooks:
       - id: gitleaks
 
@@ -35,15 +35,6 @@ repos:
       - id: terraform_fmt                                               ## Checks terraform format
       - id: terraform_validate                                          ## validates with tflint and initializes modules/files if they are not initialized
       - id: terraform_docs                                              ## Validate and build README's files
-        args:
-          - --hook-config=--path-to-file=README.md                      ## default path is . This specifies the path to the file, including the file name
-          # List below the README's of nested modules
-          # - --hook-config=--path-to-file=./modules/nestedA/README.md
-          # Include additional examples README's if applicable
-          #- --hook-config=--path-to-file=./examples/minimum/README.md
-          #- --hook-config=--path-to-file=./examples/complete/README.md
-          - --hook-config=--add-to-existing-file=true                   ## Appends markdown to an existing file
-          - --hook-config=--create-file-if-not-exist=true               ## Create README.md if it does not exist
       - id: terraform_tflint
         args: ## The arguments below are rules that are usually provided by ruleset plugins, but the rules for the Terraform Language are built into the TFLint binary. Below is a list of available rules. See https://github.com/terraform-linters/tflint/blob/v0.33.1/docs/rules
           - --args=--only=terraform_deprecated_interpolation            ## Disallow deprecated (0.11-style) interpolation  # HOW TO FIX: Switch to the new interpolation syntax. See the release notes for Terraform 0.12.14 for details: https://github.com/hashicorp/terraform/releases/tag/v0.12.14
