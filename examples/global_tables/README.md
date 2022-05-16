@@ -17,9 +17,9 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.11.0 |
-| <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | 4.11.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.1.3 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0.0 |
+| <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | >= 4.0.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 3.1.0 |
 
 ## Modules
 
