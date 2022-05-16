@@ -1,6 +1,6 @@
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 
-<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>
+[<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>](https://boldlink.io)
 
 # AWS DynamoDB Terraform module
 
@@ -76,15 +76,16 @@ module "minimum" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.7 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14.11 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0.0 |
+| <a name="requirement_github"></a> [github](#requirement\_github) | >= 4.24.1 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.1.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.14.0 |
 
 ## Modules
 
