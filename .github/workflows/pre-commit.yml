@@ -60,4 +60,4 @@ jobs:
         terraform --version
     - uses: actions/setup-python@v2
     - run: pip install --upgrade pre-commit
-    - run: pre-commit run --all-files
+    #- run: pre-commit run --all-files
