@@ -31,7 +31,7 @@ jobs:
         terraform --version
     - uses: actions/setup-python@v2
     - run: pip install --upgrade pre-commit
-    - run: pre-commit run --all-files
+    - run: pre-commit run --all-files && pre-commit run --all-files
         ### Additional test code below to run if the above fails. Use case is when a file has been modified by workflow
   run-if-failed:
     runs-on: ubuntu-latest
