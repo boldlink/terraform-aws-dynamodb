@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added autoscaling
 - Split examples
 - Added different encryption options (default, external kms_key, module-created kms_key)
+- Fixed security checks flagged by checkov
+- Locked module to terraform version 0.14.11 due to previous github actions jobs failing due to use of v0.13.*
 
 ## [1.0.0] - 2022-04-07
 ### Description
