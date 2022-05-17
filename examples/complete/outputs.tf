@@ -1,6 +1,6 @@
 output "outputs" {
   value = [
-    module.autoscaled,
+    module.complete,
   ]
   description = "Various output values for autoscaled dynamodb module"
 }

@@ -78,7 +78,6 @@ module "minimum" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14.11 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0.0 |
-| <a name="requirement_github"></a> [github](#requirement\_github) | >= 4.24.1 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.1.0 |
 
 ## Providers
@@ -171,7 +170,7 @@ This repository uses third party software:
 * [pre-commit](https://pre-commit.com/) - Used to help ensure code and documentation consistency
   * Install with `brew install pre-commit`
   * Manually use with `pre-commit run`
-* [terraform 0.14.7](https://releases.hashicorp.com/terraform/0.14.11/) For backwards compability we are using version 0.14.11 for testing making this the min version tested and without issues with terraform-docs.
+* [terraform 0.14.11](https://releases.hashicorp.com/terraform/0.14.11/) For backwards compability we are using version 0.14.11 for testing making this the min version tested and without issues with terraform-docs.
 * [terraform-docs](https://github.com/segmentio/terraform-docs) - Used to generate the [Inputs](#Inputs) and [Outputs](#Outputs) sections
   * Install with `brew install terraform-docs`
   * Manually use via pre-commit
