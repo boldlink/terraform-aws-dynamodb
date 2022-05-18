@@ -1,0 +1,9 @@
+directory:
+- .
+download-external-modules: false
+evaluate-variables: true
+external-modules-download-path: .external_modules
+framework: all
+skip-check:
+- CKV_AWS_111 #Ensure IAM policies does not allow write access without constraints
+- CKV_AWS_109 #Ensure IAM policies does not allow permissions management / resource exposure without constraints

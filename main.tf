@@ -46,8 +46,8 @@ resource "aws_dynamodb_table" "main" {
     for_each = var.global_secondary_index
     content {
       name               = global_secondary_index.value.name
-      write_capacity     = lookup(global_secondary_index.value, "write_capacity", null)
-      read_capacity      = lookup(global_secondary_index.value, "read_capacity", null)
+      write_capacity     = var.billing_mode == "PROVISIONED" ? lookup(global_secondary_index.value, "write_capacity", null) : null
+      read_capacity      = var.billing_mode == "PROVISIONED" ? lookup(global_secondary_index.value, "read_capacity", null) : null
       hash_key           = global_secondary_index.value.hash_key
       range_key          = lookup(global_secondary_index.value, "range_key", null)
       projection_type    = global_secondary_index.value.projection_type
@@ -96,7 +96,7 @@ resource "aws_dynamodb_table" "main" {
   lifecycle {
     ignore_changes = [
       read_capacity,
-      write_capacity
+      write_capacity,
     ]
   }
 }
@@ -106,6 +106,7 @@ resource "aws_kms_key" "ddbsse" {
   description             = "KMS Key for ${local.name} DynamoDB SSE"
   policy                  = data.aws_iam_policy_document.main.json
   deletion_window_in_days = var.key_deletion_window
+  enable_key_rotation     = true
 }
 
 resource "aws_kms_alias" "ddbsse" {

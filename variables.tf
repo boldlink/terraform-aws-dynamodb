@@ -139,15 +139,7 @@ variable "local_secondary_index" {
 }
 
 variable "global_secondary_index" {
-  type = list(object({
-    hash_key           = string
-    name               = string
-    non_key_attributes = list(string)
-    projection_type    = string
-    range_key          = string
-    read_capacity      = number
-    write_capacity     = number
-  }))
+  type        = list(any)
   default     = []
   description = "Additional global secondary indexes in the form of a list of mapped values"
 }

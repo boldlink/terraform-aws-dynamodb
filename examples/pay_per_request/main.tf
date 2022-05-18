@@ -26,8 +26,6 @@ module "ppr_dynamodb_table" {
       name               = "ProfessionalTitleIndex"
       hash_key           = "ProfessionalTitle"
       range_key          = "SocialScore"
-      write_capacity     = 10
-      read_capacity      = 10
       projection_type    = "INCLUDE"
       non_key_attributes = ["UserId"]
     }

@@ -7,6 +7,7 @@ module "complete" {
   read_capacity      = 3 ## 3 strongly consistent read per second, or 6 eventually consistent reads per second
   write_capacity     = 4 ## 4 writes per second, for an item up to 1 KB in size.
   enable_autoscaling = true
+  create_sse_kms_key = true
 
   ## For both read and write, these values are set like so to allow faster scale out and slow scale down
   ## Max and min_capacities: provisioned capacity that your table will allow. Cannot scale above/below these values.

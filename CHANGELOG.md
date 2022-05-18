@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `versions.tf`, which is important for pre-commit checks
 - Added `Makefile` for examples automation
 - Added `.gitignore` file
+- Added `..checkov.yml` file to skip checkov checks `CKV_AWS_111` and `CKV_AWS_109`. **NOTE**: Correcting these checks result in malformed IAM policy
 
 ### Changes/Fixes
 - READMEs in root and examples folders to have a new header and footer
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modified the `.pre-commit-config.yaml`
 - Locked module to terraform version `0.14.11` due to previous github actions jobs failing due to use of v0.13.7
 - Used more contraint in IAM policy as shown in `data.tf` file
+- Resolved resource/feature update-in-place/recreation on `terraform apply` for tables with `On-demand`/`PAY_PER_REQUEST` billing mode
 
 ## [1.0.1] - 2022-04-21
 

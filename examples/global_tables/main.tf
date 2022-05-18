@@ -35,11 +35,13 @@ resource "aws_kms_key" "secondary" {
 ### [Has an issue](https://github.com/aws/aws-cdk/issues/11346) with global table with `PROVISIONED` mode
 ###########################################################################################################
 module "dynamodb_table" {
-  source       = "../../"
-  name         = "global-tables-example"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "UserId"
-  range_key    = "GameTitle"
+  source           = "../../"
+  name             = "global-tables-example"
+  billing_mode     = "PAY_PER_REQUEST"
+  hash_key         = "UserId"
+  range_key        = "GameTitle"
+  stream_enabled   = true
+  stream_view_type = "NEW_AND_OLD_IMAGES"
 
   attributes = [
     {

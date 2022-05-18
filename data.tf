@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "main" {
       identifiers = ["*"]
     }
 
-    resources = ["aws_dynamodb_table.main"]
+    resources = ["*"]
     condition {
       test     = "StringEquals"
       variable = "kms:CallerAccount"
@@ -60,8 +60,7 @@ data "aws_iam_policy_document" "main" {
 
       identifiers = ["arn:${local.partition}:iam::${local.account_id}:root"]
     }
-
-    resources = ["aws_dynamodb_table.main"]
+    resources = ["*"]
   }
 
   statement {
@@ -80,7 +79,6 @@ data "aws_iam_policy_document" "main" {
 
       identifiers = ["dynamodb.amazonaws.com"]
     }
-
-    resources = ["aws_dynamodb_table.main"]
+    resources = ["*"]
   }
 }
