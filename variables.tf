@@ -87,7 +87,7 @@ variable "key_deletion_window" {
 variable "point_in_time_recovery_enabled" {
   type        = bool
   description = "Specify whether to enable point-in-time-recovery for the dynamodb table."
-  default     = false
+  default     = true
 }
 
 variable "sse_enabled" {

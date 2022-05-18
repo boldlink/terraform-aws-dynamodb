@@ -15,9 +15,7 @@
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_random"></a> [random](#provider\_random) | 3.1.3 |
+No providers.
 
 ## Modules
 
@@ -27,9 +25,7 @@
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [random_pet.main](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) | resource |
+No resources.
 
 ## Inputs
 

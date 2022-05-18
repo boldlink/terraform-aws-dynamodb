@@ -14,23 +14,15 @@ Examples available [`here`](https://github.com/boldlink/terraform-aws-dynamodb/t
 *NOTE*: These examples use the latest version of this module
 
 ```hcl
-locals {
-  name_prefix = "LibraryPoints"
-}
-
-resource "random_pet" "main" {
-  length = 2
-}
-
-module "minimum" {
-  source             = "boldlink/dynamodb/aws"
-  name               = "${local.name_prefix}-${random_pet.main.id}"
-  billing_mode       = "PROVISIONED"
-  enable_autoscaling = true
-  read_capacity      = 3
-  write_capacity     = 4
-  hash_key           = "UserId"
-  range_key          = "BookTitle"
+module "dynamodb_table" {
+  source                         = "../../"
+  name                           = "minimum-example"
+  billing_mode                   = "PROVISIONED"
+  enable_autoscaling             = true
+  read_capacity                  = 3
+  write_capacity                 = 4
+  hash_key                       = "UserId"
+  range_key                      = "BookTitle"
 
   attributes = [
     {
@@ -60,7 +52,7 @@ module "minimum" {
   ]
 
   tags = {
-    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Name        = "minimum-example"
     Environment = "dev"
   }
 }
@@ -135,7 +127,7 @@ No modules.
 | <a name="input_key_deletion_window"></a> [key\_deletion\_window](#input\_key\_deletion\_window) | The waiting period, specified in number of days. Must be between `7` and `30`inclusive. | `number` | `7` | no |
 | <a name="input_local_secondary_index"></a> [local\_secondary\_index](#input\_local\_secondary\_index) | (Optional, Forces new resource) Describe an LSI on the table; these can only be allocated at creation so you cannot change this definition after you have created the resource. | `map(string)` | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) The name of the table, this needs to be unique within a region. | `string` | n/a | yes |
-| <a name="input_point_in_time_recovery_enabled"></a> [point\_in\_time\_recovery\_enabled](#input\_point\_in\_time\_recovery\_enabled) | Specify whether to enable point-in-time-recovery for the dynamodb table. | `bool` | `false` | no |
+| <a name="input_point_in_time_recovery_enabled"></a> [point\_in\_time\_recovery\_enabled](#input\_point\_in\_time\_recovery\_enabled) | Specify whether to enable point-in-time-recovery for the dynamodb table. | `bool` | `true` | no |
 | <a name="input_range_key"></a> [range\_key](#input\_range\_key) | (Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an `attribute` | `string` | `null` | no |
 | <a name="input_read_capacity"></a> [read\_capacity](#input\_read\_capacity) | (Optional) The number of read units for this table. If the billing\_mode is `PROVISIONED`, this field is `required`. | `number` | `null` | no |
 | <a name="input_replica"></a> [replica](#input\_replica) | (Optional) Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. | `map(string)` | `{}` | no |

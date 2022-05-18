@@ -1,20 +1,10 @@
-locals {
-  name_prefix = "ProfessionalTitle"
-}
-
-resource "random_pet" "main" {
-  length = 2
-}
-
 module "ppr_dynamodb_table" {
-  #source                        = "boldlink/dynamodb/aws"
-  source                         = "../../"
-  name                           = "${local.name_prefix}-${random_pet.main.id}"
-  billing_mode                   = "PAY_PER_REQUEST"
-  enable_autoscaling             = true
-  hash_key                       = "UserId"
-  range_key                      = "ProfessionalTitle"
-  point_in_time_recovery_enabled = true
+  source             = "../../"
+  name               = "pay-per-request-example"
+  billing_mode       = "PAY_PER_REQUEST"
+  enable_autoscaling = true
+  hash_key           = "UserId"
+  range_key          = "ProfessionalTitle"
 
   attributes = [
     {
@@ -44,7 +34,7 @@ module "ppr_dynamodb_table" {
   ]
 
   tags = {
-    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Name        = "pay-per-request-example"
     Environment = "dev"
   }
 }

@@ -1,22 +1,12 @@
-locals {
-  name_prefix = "LibraryPoints"
-}
-
-resource "random_pet" "main" {
-  length = 2
-}
-
 module "dynamodb_table" {
-  #source                        = "boldlink/dynamodb/aws"
-  source                         = "../../"
-  name                           = "${local.name_prefix}-${random_pet.main.id}"
-  billing_mode                   = "PROVISIONED"
-  enable_autoscaling             = true
-  read_capacity                  = 3
-  write_capacity                 = 4
-  hash_key                       = "UserId"
-  range_key                      = "BookTitle"
-  point_in_time_recovery_enabled = true
+  source             = "../../"
+  name               = "minimum-example"
+  billing_mode       = "PROVISIONED"
+  enable_autoscaling = true
+  read_capacity      = 3
+  write_capacity     = 4
+  hash_key           = "UserId"
+  range_key          = "BookTitle"
 
   attributes = [
     {
@@ -46,7 +36,7 @@ module "dynamodb_table" {
   ]
 
   tags = {
-    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Name        = "minimum-example"
     Environment = "dev"
   }
 }

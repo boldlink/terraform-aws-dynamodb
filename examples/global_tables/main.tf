@@ -7,23 +7,14 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-locals {
-  name_prefix = "GameScores"
-}
-
 #########################
 # Supporting Resources
 #########################
-
-resource "random_pet" "main" {
-  length = 2
-}
-
 resource "aws_kms_key" "primary" {
   description         = "CMK for primary region"
   enable_key_rotation = true
   tags = {
-    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Name        = "Global-tables-example"
     Environment = "dev"
   }
 }
@@ -34,7 +25,7 @@ resource "aws_kms_key" "secondary" {
   description         = "CMK for secondary region"
   enable_key_rotation = true
   tags = {
-    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Name        = "Global-tables-example"
     Environment = "dev"
   }
 }
@@ -44,13 +35,11 @@ resource "aws_kms_key" "secondary" {
 ### [Has an issue](https://github.com/aws/aws-cdk/issues/11346) with global table with `PROVISIONED` mode
 ###########################################################################################################
 module "dynamodb_table" {
-  #source                        = "boldlink/dynamodb/aws"
-  source                         = "../../"
-  name                           = "${local.name_prefix}-${random_pet.main.id}"
-  billing_mode                   = "PAY_PER_REQUEST"
-  hash_key                       = "UserId"
-  range_key                      = "GameTitle"
-  point_in_time_recovery_enabled = true
+  source       = "../../"
+  name         = "global-tables-example"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "UserId"
+  range_key    = "GameTitle"
 
   attributes = [
     {
@@ -87,7 +76,7 @@ module "dynamodb_table" {
   }
 
   tags = {
-    Name        = "${local.name_prefix}-${random_pet.main.id}"
+    Name        = "global-tables-example"
     Environment = "dev"
   }
 }
