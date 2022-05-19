@@ -7,9 +7,10 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-#########################
-# Supporting Resources
-#########################
+#############################################################################################################
+# Supporting Resources: Reason => All replica keys must either be Customer Managed CMK or AWS Managed CMK.
+# Default KMS Key(AWS Managed CMK) may not be available is some regions
+#############################################################################################################
 resource "aws_kms_key" "primary" {
   description         = "CMK for primary region"
   enable_key_rotation = true
@@ -63,8 +64,6 @@ module "dynamodb_table" {
       name               = "GameTitleIndex"
       hash_key           = "GameTitle"
       range_key          = "TopScore"
-      write_capacity     = 4
-      read_capacity      = 4
       projection_type    = "INCLUDE"
       non_key_attributes = ["UserId"]
     }

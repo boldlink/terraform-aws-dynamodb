@@ -12,42 +12,10 @@ data "aws_kms_key" "default" {
 
 #### Policy document for sse kms key
 #### for dynamodb
-data "aws_iam_policy_document" "main" {
+data "aws_iam_policy_document" "sse_kms_policy" {
 
   statement {
-    sid = "Allow access for all principals in the account that are authorized to use Amazon DynamoDB"
-
-    actions = [
-      "kms:Encrypt*",
-      "kms:Decrypt*",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:Describe*"
-    ]
-
-    effect = "Allow"
-
-    principals {
-      type = "AWS"
-
-      identifiers = ["*"]
-    }
-
-    resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "kms:CallerAccount"
-      values   = [local.account_id]
-    }
-    condition {
-      test     = "StringLike"
-      variable = "kms:ViaService"
-      values   = ["dynamodb.*.amazonaws.com"]
-    }
-  }
-
-  statement {
-    sid = "Allow direct access to key metadata to the account"
+    sid = "Allow Administrators to manage the key"
 
     actions = [
       "kms:*",
@@ -61,6 +29,35 @@ data "aws_iam_policy_document" "main" {
       identifiers = ["arn:${local.partition}:iam::${local.account_id}:root"]
     }
     resources = ["*"]
+  }
+
+  dynamic "statement" {
+    for_each = var.additional_kms_permissions
+    content {
+      sid = try(statement.value.sid, null)
+
+      actions = try(statement.value.actions, null)
+
+      effect = try(statement.value.effect, null)
+
+      dynamic "principals" {
+        for_each = try([statement.value.principals], [])
+        content {
+          type        = principals.value.type
+          identifiers = principals.value.identifiers
+        }
+      }
+
+      dynamic "condition" {
+        for_each = try([statement.value.condition], [])
+
+        content {
+          test     = condition.value.test
+          variable = condition.value.variable
+          values   = condition.value.values
+        }
+      }
+    }
   }
 
   statement {

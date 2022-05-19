@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add: Table items in example
 - Add: Streams in example
 - Add: Cloudwatch Contributor Insights for DynamoDB
+- Add: Allow for a custom KMS policy
 
 ## [1.1.0] - 2022-05-17
 

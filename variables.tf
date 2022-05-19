@@ -78,6 +78,18 @@ variable "create_sse_kms_key" {
   default     = false
 }
 
+variable "additional_kms_permissions" {
+  type        = any
+  description = "Add additional policies for the DDB SSE Key created by this module"
+  default     = []
+}
+
+variable "enable_key_rotation" {
+  type        = bool
+  description = "Specify whether to enable kms key rotation."
+  default     = true
+}
+
 variable "key_deletion_window" {
   type        = number
   description = "The waiting period, specified in number of days. Must be between `7` and `30`inclusive."
@@ -141,7 +153,7 @@ variable "local_secondary_index" {
 variable "global_secondary_index" {
   type        = list(any)
   default     = []
-  description = "Additional global secondary indexes in the form of a list of mapped values"
+  description = "Additional global secondary indexes in the form of a list of mapped values. These mapped values are: `hash_key`, `name`, `non_key_attributes`, `projection_type`, `range_key`, `read_capacity` and `write_capacity`. **Note**: For `PAY_PER_REQUEST (On-demand)` mode both `read_capacity` and `write_capacity` are `not applicable`."
 }
 
 variable "replica" {

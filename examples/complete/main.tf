@@ -1,6 +1,6 @@
 module "complete" {
   source             = "../../"
-  name               = "complete-example"
+  name               = "complete-example1"
   hash_key           = "id"
   range_key          = "title"
   billing_mode       = "PROVISIONED"

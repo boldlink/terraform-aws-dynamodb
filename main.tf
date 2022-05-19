@@ -104,9 +104,9 @@ resource "aws_dynamodb_table" "main" {
 resource "aws_kms_key" "ddbsse" {
   count                   = var.create_sse_kms_key ? 1 : 0
   description             = "KMS Key for ${local.name} DynamoDB SSE"
-  policy                  = data.aws_iam_policy_document.main.json
+  policy                  = data.aws_iam_policy_document.sse_kms_policy.json
   deletion_window_in_days = var.key_deletion_window
-  enable_key_rotation     = true
+  enable_key_rotation     = var.enable_key_rotation
 }
 
 resource "aws_kms_alias" "ddbsse" {

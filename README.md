@@ -99,7 +99,7 @@ No modules.
 | [aws_kms_alias.ddbsse](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.ddbsse](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.sse_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_kms_alias.aws_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
 | [aws_kms_key.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
@@ -108,6 +108,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_additional_kms_permissions"></a> [additional\_kms\_permissions](#input\_additional\_kms\_permissions) | Add additional policies for the DDB SSE Key created by this module | `any` | `[]` | no |
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | (Required) List of nested attribute definitions. Only required for hash\_key and range\_key attributes. | `list(map(string))` | `[]` | no |
 | <a name="input_autoscaling_defaults"></a> [autoscaling\_defaults](#input\_autoscaling\_defaults) | A map of default autoscaling settings. | `map(string)` | <pre>{<br>  "scale_in_cooldown": 0,<br>  "scale_out_cooldown": 0,<br>  "target_value": 70<br>}</pre> | no |
 | <a name="input_autoscaling_indexes"></a> [autoscaling\_indexes](#input\_autoscaling\_indexes) | A map of index autoscaling configurations. See example in examples/autoscaling | `map(map(string))` | `{}` | no |
@@ -121,7 +122,8 @@ No modules.
 | <a name="input_dynamodb_table_min_read_capacity"></a> [dynamodb\_table\_min\_read\_capacity](#input\_dynamodb\_table\_min\_read\_capacity) | The minimum number of read units for this table. | `number` | `5` | no |
 | <a name="input_dynamodb_table_min_write_capacity"></a> [dynamodb\_table\_min\_write\_capacity](#input\_dynamodb\_table\_min\_write\_capacity) | The minimum number of write units for this table. | `number` | `5` | no |
 | <a name="input_enable_autoscaling"></a> [enable\_autoscaling](#input\_enable\_autoscaling) | Determines whether to enable autoscaling for the DynamoDB table. | `bool` | `false` | no |
-| <a name="input_global_secondary_index"></a> [global\_secondary\_index](#input\_global\_secondary\_index) | Additional global secondary indexes in the form of a list of mapped values | `list(any)` | `[]` | no |
+| <a name="input_enable_key_rotation"></a> [enable\_key\_rotation](#input\_enable\_key\_rotation) | Specify whether to enable kms key rotation. | `bool` | `true` | no |
+| <a name="input_global_secondary_index"></a> [global\_secondary\_index](#input\_global\_secondary\_index) | Additional global secondary indexes in the form of a list of mapped values. These mapped values are: `hash_key`, `name`, `non_key_attributes`, `projection_type`, `range_key`, `read_capacity` and `write_capacity`. **Note**: For `PAY_PER_REQUEST (On-demand)` mode both `read_capacity` and `write_capacity` are `not applicable`. | `list(any)` | `[]` | no |
 | <a name="input_hash_key"></a> [hash\_key](#input\_hash\_key) | (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an `attribute` | `string` | n/a | yes |
 | <a name="input_item_range_key"></a> [item\_range\_key](#input\_item\_range\_key) | (Optional) Range key to use for lookups and identification of the item. Required if there is range key defined in the table. | `string` | `null` | no |
 | <a name="input_key_deletion_window"></a> [key\_deletion\_window](#input\_key\_deletion\_window) | The waiting period, specified in number of days. Must be between `7` and `30`inclusive. | `number` | `7` | no |
