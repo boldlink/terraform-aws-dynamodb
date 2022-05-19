@@ -6,10 +6,6 @@ data "aws_kms_alias" "aws_default" {
   name = "alias/aws/dynamodb"
 }
 
-data "aws_kms_key" "default" {
-  key_id = data.aws_kms_alias.aws_default.target_key_id
-}
-
 #### Policy document for sse kms key
 #### for dynamodb
 data "aws_iam_policy_document" "sse_kms_policy" {
@@ -74,7 +70,7 @@ data "aws_iam_policy_document" "sse_kms_policy" {
     principals {
       type = "Service"
 
-      identifiers = ["dynamodb.amazonaws.com"]
+      identifiers = ["dynamodb.${local.dns_suffix}"]
     }
     resources = ["*"]
   }

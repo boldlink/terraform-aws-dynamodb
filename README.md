@@ -101,7 +101,6 @@ No modules.
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.sse_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_kms_alias.aws_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
-| [aws_kms_key.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 
 ## Inputs
@@ -136,11 +135,11 @@ No modules.
 | <a name="input_restore_date_time"></a> [restore\_date\_time](#input\_restore\_date\_time) | (Optional) The time of the point-in-time recovery point to restore. | `string` | `null` | no |
 | <a name="input_restore_source_name"></a> [restore\_source\_name](#input\_restore\_source\_name) | (Optional) The name of the table to restore. Must match the name of an existing table. | `string` | `null` | no |
 | <a name="input_restore_to_latest_time"></a> [restore\_to\_latest\_time](#input\_restore\_to\_latest\_time) | (Optional) If set, restores table to the most recent point-in-time recovery point. | `bool` | `false` | no |
-| <a name="input_sse_enabled"></a> [sse\_enabled](#input\_sse\_enabled) | Specify whether server-side encryption is enabled for the dynamodb table. | `bool` | `true` | no |
+| <a name="input_sse_enabled"></a> [sse\_enabled](#input\_sse\_enabled) | Specify whether server-side encryption is enabled for the dynamodb table. If enabled is `false` then server-side encryption is set to AWS owned CMK (shown as `DEFAULT` in the AWS console). If enabled is `true` and no `kms_key_arn` is specified then server-side encryption is set to AWS managed CMK (shown as `KMS` in the AWS console). | `bool` | `false` | no |
 | <a name="input_sse_kms_key_arn"></a> [sse\_kms\_key\_arn](#input\_sse\_kms\_key\_arn) | Provide the ARN for the KMS key to use for DDB server-side encryption. | `string` | `null` | no |
 | <a name="input_stream_enabled"></a> [stream\_enabled](#input\_stream\_enabled) | (Optional) Indicates whether Streams are to be enabled (true) or disabled (false). | `bool` | `false` | no |
 | <a name="input_stream_view_type"></a> [stream\_view\_type](#input\_stream\_view\_type) | (Optional) When an item in the table is modified, StreamViewType determines what information is written to the table's stream. Valid values are `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`. | `string` | `null` | no |
-| <a name="input_table_class"></a> [table\_class](#input\_table\_class) | (Optional) The storage class of the table. Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`. | `string` | `null` | no |
+| <a name="input_table_class"></a> [table\_class](#input\_table\_class) | (Optional) The storage class of the table. Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`. | `string` | `"STANDARD"` | no |
 | <a name="input_table_item"></a> [table\_item](#input\_table\_item) | (Required) JSON representation of a map of attribute name/value pairs, one for each attribute. Only the primary key attributes are required; you can optionally provide other attribute name-value pairs for the item. | `string` | `""` | no |
 | <a name="input_table_item_hash_key"></a> [table\_item\_hash\_key](#input\_table\_item\_hash\_key) | (Required) Hash key to use for lookups and identification of the item | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (Optional) A map of tags to populate on the created table. If configured with a provider [default\_tags configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. | `map(string)` | `{}` | no |

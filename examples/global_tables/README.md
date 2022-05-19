@@ -4,6 +4,9 @@
 
 # Example with DynamoDB Global tables configuration
 
+**NOTE**: The check `CKV_AWS_119 #Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK` was skipped in this example because we are encrypting both replicas
+with `AWS Managed CMK`.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
@@ -17,7 +20,6 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.14.0 |
 | <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | 4.14.0 |
 
 ## Modules
@@ -30,8 +32,7 @@
 
 | Name | Type |
 |------|------|
-| [aws_kms_key.primary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
-| [aws_kms_key.secondary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_kms_alias.aws_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
 
 ## Inputs
 

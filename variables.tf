@@ -104,8 +104,8 @@ variable "point_in_time_recovery_enabled" {
 
 variable "sse_enabled" {
   type        = bool
-  description = "Specify whether server-side encryption is enabled for the dynamodb table."
-  default     = true
+  description = "Specify whether server-side encryption is enabled for the dynamodb table. If enabled is `false` then server-side encryption is set to AWS owned CMK (shown as `DEFAULT` in the AWS console). If enabled is `true` and no `kms_key_arn` is specified then server-side encryption is set to AWS managed CMK (shown as `KMS` in the AWS console)."
+  default     = false
 }
 
 variable "sse_kms_key_arn" {
@@ -195,7 +195,7 @@ variable "stream_view_type" {
 variable "table_class" {
   type        = string
   description = "(Optional) The storage class of the table. Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`."
-  default     = null
+  default     = "STANDARD"
 }
 
 variable "tags" {
