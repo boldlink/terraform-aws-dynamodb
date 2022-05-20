@@ -4,7 +4,7 @@ lorem ipsum lorem ipsum lorem ipsum lorem
 
 ## Features/Fixes/Patches/Changes list:
 
-Please check the [CHANGLOG.md](https://github.com/boldlink/terraform-aws-dynamodb/blob/feature/ddb-module-development/CHANGELOG.md)
+Please check the [CHANGLOG.md](https://github.com/boldlink/terraform-aws-dynamodb/blob/afea2f40ded4aaa22d5765b58ada380807fc1b82/CHANGELOG.md#)
 
 ## Checklists:
 <!-- You can erase any parts of this template not applicable to your Pull Request. -->
