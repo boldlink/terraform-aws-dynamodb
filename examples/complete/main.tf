@@ -1,6 +1,6 @@
 module "complete" {
   source             = "../../"
-  name               = "complete-example1"
+  name               = "complete-example"
   hash_key           = "id"
   range_key          = "title"
   billing_mode       = "PROVISIONED"
@@ -28,7 +28,7 @@ module "complete" {
   autoscaling_indexes = {
     TitleIndex = {
       read_max_capacity  = 15
-      read_min_capacity  = 8
+      read_min_capacity  = 10
       write_max_capacity = 20
       write_min_capacity = 10
     }

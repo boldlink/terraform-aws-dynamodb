@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feature: Cloudwatch Contributor Insights for DynamoDB
 - Feature: Support for DDB DAX Cluster accelerator
 - Feature: Allow for a custom KMS policy
+- Add: Usage of local secondary index in examples
 
 ## [1.1.0] - 2022-05-17
 

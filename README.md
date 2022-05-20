@@ -10,8 +10,38 @@ This terraform module creates a dynamodb table and item(s)
 
 Examples available [`here`](https://github.com/boldlink/terraform-aws-dynamodb/tree/main/examples)
 
+### **Important Points to Note**:
+- These examples use the latest version of this module
+- Global Secondary Index can be created or deleted for a previously created table. This can take more time if the table is populated.
+- Currently, there is no support for `ignore_changes` for both `write_capacity` and `read_capacity` in `global_secondary_index`.  
+An issue about this has been raised [here](https://github.com/hashicorp/terraform-provider-aws/issues/17096) hence it could be solved possibly when `global_secondary_index` will be a separate resource.
+- For Autoscaled indices (module `autoscaling_indexes`) it is important to have both `read_min_capacity` and `write_min_capacity` values match the values provided for `write_capacity` and `read_capacity` in the `global_secondary_index`. This will prevent terraform from trying to change the values when you do a `terraform plan/terraform apply`. See below;
+
+```hcl
+module "abc" {
+  `_......(other configuration here)_`
+
+  autoscaling_indexes = {
+    `IndexName` = {
+      `_......(other configuration here)_`
+
+      read_min_capacity  = 10
+      write_min_capacity = 10
+    }
+  }
+
+  global_secondary_index = [
+    {
+      `_......(other configuration here)_`
+
+      write_capacity     = 10
+      read_capacity      = 10
+    }
+  ]
+}
+```
+
 ## Usage
-*NOTE*: These examples use the latest version of this module
 
 ```hcl
 module "dynamodb_table" {
