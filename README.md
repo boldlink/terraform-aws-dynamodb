@@ -19,11 +19,11 @@ An issue about this has been raised [here](https://github.com/hashicorp/terrafor
 
 ```hcl
 module "abc" {
-  `_......(other configuration here)_`
+  ......(other configuration here)
 
   autoscaling_indexes = {
-    `IndexName` = {
-      `_......(other configuration here)_`
+    IndexName = {
+      ......(other configuration here)
 
       read_min_capacity  = 10
       write_min_capacity = 10
@@ -32,7 +32,7 @@ module "abc" {
 
   global_secondary_index = [
     {
-      `_......(other configuration here)_`
+      ......(other configuration here)
 
       write_capacity     = 10
       read_capacity      = 10
