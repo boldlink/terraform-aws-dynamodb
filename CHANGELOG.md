@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feature: Streams in example
 - Feature: Cloudwatch Contributor Insights for DynamoDB
 - Feature: Support for DDB DAX Cluster accelerator
-- Feature: Allow for a custom KMS policy
+- Feature: Allow for a custom KMS policy, this will allow to change the default KMS policies and resolve checkov warnings
 - Add: Usage of local secondary index in examples
 
 ## [1.1.0] - 2022-05-17
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `versions.tf`, which is important for pre-commit checks
 - Added `Makefile` for examples automation
 - Added `.gitignore` file
-- Added `.checkov.yml` file to skip checkov checks `CKV_AWS_111` and `CKV_AWS_109`. **NOTE**: Correcting these checks results in malformed IAM policy
+- Added `.checkov.yml` file to skip checkov checks `CKV_AWS_119` `CKV_AWS_111` and `CKV_AWS_109`. **NOTE**: Correcting these checks results in malformed IAM policy
 
 ### Changes/Fixes
 - READMEs in root and examples folders to have a new header and footer
