@@ -11,43 +11,83 @@ variable "billing_mode" {
 
 variable "enable_autoscaling" {
   type        = bool
-  description = "Determines whether to enable autoscaling for the DynamoDB table"
+  description = "Determines whether to enable autoscaling for the DynamoDB table."
   default     = false
 }
 
-variable "dynamodb_table_max_read_capacity" {
-  type        = number
-  description = "The maximum number of read units for this table."
-  default     = 100
+variable "autoscaling_defaults" {
+  description = "A map of default autoscaling settings."
+  type        = map(string)
+  default = {
+    scale_in_cooldown  = 0
+    scale_out_cooldown = 0
+    target_value       = 50
+  }
 }
 
-variable "dynamodb_table_min_read_capacity" {
-  type        = number
-  description = "The minimum number of read units for this table."
-  default     = 5
+variable "autoscaling_read" {
+  description = "A map of read autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling"
+  type        = map(string)
+  default     = {}
 }
 
-variable "dynamodb_table_max_write_capacity" {
-  type        = number
-  description = "The maximum number of write units for this table."
-  default     = 100
+variable "autoscaling_write" {
+  description = "A map of write autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling"
+  type        = map(string)
+  default     = {}
 }
 
-variable "dynamodb_table_min_write_capacity" {
-  type        = number
-  description = "The minimum number of write units for this table."
-  default     = 5
-}
-
-variable "read_target_value" {
-  type        = number
-  description = "The read target value for the scaling metric"
-  default     = 70
+variable "autoscaling_indexes" {
+  description = "A map of index autoscaling configurations. See example in examples/autoscaling"
+  type        = map(map(string))
+  default     = {}
 }
 
 variable "hash_key" {
   type        = string
   description = "(Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an `attribute`"
+}
+
+variable "create_sse_kms_key" {
+  type        = bool
+  description = "Specify whether you want to create the sse_kms_key using this module."
+  default     = false
+}
+
+variable "additional_kms_permissions" {
+  type        = any
+  description = "Add additional policies for the DDB SSE Key created by this module"
+  default     = []
+}
+
+variable "enable_key_rotation" {
+  type        = bool
+  description = "Specify whether to enable kms key rotation."
+  default     = true
+}
+
+variable "key_deletion_window" {
+  type        = number
+  description = "The waiting period, specified in number of days. Must be between `7` and `30`inclusive."
+  default     = 7
+}
+
+variable "point_in_time_recovery_enabled" {
+  type        = bool
+  description = "Specify whether to enable point-in-time-recovery for the dynamodb table."
+  default     = true
+}
+
+variable "sse_enabled" {
+  type        = bool
+  description = "Specify whether server-side encryption is enabled for the dynamodb table. If enabled is `false` then server-side encryption is set to AWS owned CMK (shown as `DEFAULT` in the AWS console). If enabled is `true` and no `kms_key_arn` is specified then server-side encryption is set to AWS managed CMK (shown as `KMS` in the AWS console)."
+  default     = false
+}
+
+variable "sse_kms_key_arn" {
+  type        = string
+  description = "Provide the ARN for the KMS key to use for DDB server-side encryption."
+  default     = null
 }
 
 variable "range_key" {
@@ -87,23 +127,9 @@ variable "local_secondary_index" {
 }
 
 variable "global_secondary_index" {
-  type = list(object({
-    hash_key           = string
-    name               = string
-    non_key_attributes = list(string)
-    projection_type    = string
-    range_key          = string
-    read_capacity      = number
-    write_capacity     = number
-  }))
+  type        = list(any)
   default     = []
-  description = "Additional global secondary indexes in the form of a list of mapped values"
-}
-
-variable "point_in_time_recovery" {
-  type        = map(string)
-  description = "(Optional) Enable point-in-time recovery"
-  default     = {}
+  description = "Additional global secondary indexes in the form of a list of mapped values. These mapped values are: `hash_key`, `name`, `non_key_attributes`, `projection_type`, `range_key`, `read_capacity` and `write_capacity`. **Note**: For `PAY_PER_REQUEST (On-demand)` mode both `read_capacity` and `write_capacity` are `not applicable`."
 }
 
 variable "replica" {
@@ -142,16 +168,10 @@ variable "stream_view_type" {
   default     = null
 }
 
-variable "server_side_encryption" {
-  type        = map(string)
-  description = "(Optional) Encryption at rest options. AWS DynamoDB tables are automatically encrypted at rest with an AWS owned Customer Master Key if this argument isn't specified."
-  default     = {}
-}
-
 variable "table_class" {
   type        = string
   description = "(Optional) The storage class of the table. Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`."
-  default     = null
+  default     = "STANDARD"
 }
 
 variable "tags" {
