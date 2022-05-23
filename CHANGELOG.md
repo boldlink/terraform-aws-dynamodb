@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feature: Allow for a custom KMS policy, this will allow to change the default KMS policies and resolve checkov warnings
 - Feature: Overwriting the key policy (partially/entirely)
 - Add: Usage of local secondary index in example(s)
+- Feature: Modify main module to ensure values in gsi/lsi match autoscaling values to avoid inconsistencies.
 
 ## [1.1.0] - 2022-05-17
 

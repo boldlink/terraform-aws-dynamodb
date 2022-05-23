@@ -9,10 +9,6 @@ module "dynamodb_table" {
     {
       name = "UserId"
       type = "S"
-    },
-    {
-      name = "BookTitle"
-      type = "S"
     }
   ]
 
