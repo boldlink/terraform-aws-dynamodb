@@ -7,29 +7,40 @@ SUBDIRS := $(shell find $(EXAMPLES_PATH) -maxdepth 0 -type d)
 
 tfinit:
 	for folder in $(SUBDIRS) ; do \
-			cd $$folder && terraform init ; \
+		echo "[info]: Initialising $$folder stack" ;\
+		cd $$folder ;\
+		terraform init ;\
 	done
 
 tfplan:
 	for folder in $(SUBDIRS) ; do \
-			cd $$folder && terraform plan ; \
+		echo "[info]: Plan for $$folder stack" ;\
+		cd $$folder ;\
+		terraform plan ;\
 	done
 
-tfaplly:
+tfapply:
 	for folder in $(SUBDIRS) ; do \
-			cd $$folder &&  terraform plan --out=plan.tmp && terraform apply plan.tmp ; \
+		echo "[info]: Creating $$folder stack" ;\
+		cd $$folder ;\
+		terraform plan --out=plan.tmp ;\
+		terraform apply plan.tmp ;\
+		rm plan.out ;\
 	done
 
 tfdestroy:
 	for folder in $(SUBDIRS) ; do \
-			cd $$folder && terraform destroy --auto-approve ; \
+		echo "[info]: Destroying $$folder stack" ;\
+		cd $$folder ;\
+		terraform destroy --auto-approve ;\
 	done
 
 tfclean:
 	for folder in $(SUBDIRS) ; do \
-			rm -rf $$folder/.terraform* ; \
+		echo "[info]: Cleaning $$folder tests" ;\
+		rm -rf $$folder/.terraform* ;\
 	done
 
-examplescreate: tfinit tfaplly
+tests: tfinit tfapply
 
-examplesclean: tfdestroy tfclean
+clean: tfdestroy tfclean

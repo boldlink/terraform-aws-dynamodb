@@ -111,10 +111,12 @@ resource "aws_kms_alias" "ddbsse" {
 ######################################
 ### Table Auto scaling
 ######################################
+
+## The minimum capacity has been set to match the read capacity of the table
 resource "aws_appautoscaling_target" "dynamodb_table_read_target" {
   count              = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? 1 : 0
-  max_capacity       = var.dynamodb_table_max_read_capacity
-  min_capacity       = var.dynamodb_table_min_read_capacity
+  max_capacity       = lookup(var.autoscaling_read, "max_capacity", null)
+  min_capacity       = var.read_capacity #var.dynamodb_table_min_read_capacity
   resource_id        = "table/${aws_dynamodb_table.main.name}"
   scalable_dimension = "dynamodb:table:ReadCapacityUnits"
   service_namespace  = "dynamodb"
@@ -138,10 +140,11 @@ resource "aws_appautoscaling_policy" "dynamodb_table_read_policy" {
   }
 }
 
+## The minimum capacity has been set to match the write capacity of the table
 resource "aws_appautoscaling_target" "dynamodb_table_write_target" {
   count              = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? 1 : 0
-  max_capacity       = var.dynamodb_table_max_write_capacity
-  min_capacity       = var.dynamodb_table_min_write_capacity
+  max_capacity       = lookup(var.autoscaling_write, "max_capacity", null)
+  min_capacity       = var.write_capacity
   resource_id        = "table/${aws_dynamodb_table.main.name}"
   scalable_dimension = "dynamodb:table:WriteCapacityUnits"
   service_namespace  = "dynamodb"

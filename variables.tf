@@ -15,37 +15,13 @@ variable "enable_autoscaling" {
   default     = false
 }
 
-variable "dynamodb_table_max_read_capacity" {
-  type        = number
-  description = "The maximum number of read units for this table."
-  default     = 100
-}
-
-variable "dynamodb_table_min_read_capacity" {
-  type        = number
-  description = "The minimum number of read units for this table."
-  default     = 5
-}
-
-variable "dynamodb_table_max_write_capacity" {
-  type        = number
-  description = "The maximum number of write units for this table."
-  default     = 100
-}
-
-variable "dynamodb_table_min_write_capacity" {
-  type        = number
-  description = "The minimum number of write units for this table."
-  default     = 5
-}
-
 variable "autoscaling_defaults" {
   description = "A map of default autoscaling settings."
   type        = map(string)
   default = {
     scale_in_cooldown  = 0
     scale_out_cooldown = 0
-    target_value       = 70
+    target_value       = 50
   }
 }
 

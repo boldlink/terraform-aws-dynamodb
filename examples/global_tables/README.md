@@ -5,7 +5,7 @@
 # Example with DynamoDB Global tables configuration
 
 **NOTE**: The check `CKV_AWS_119 #Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK` was skipped in this example because we are encrypting both replicas
-with `AWS Managed CMK`.
+with `AWS Managed CMK`. For production, it is recommented that you use a CMK (Customer Managed Key) and not a AWS owned or AWS CMK key.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements

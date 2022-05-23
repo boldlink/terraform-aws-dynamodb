@@ -47,11 +47,9 @@ module "abc" {
 module "dynamodb_table" {
   source         = "../../"
   name           = "minimum-example"
-  billing_mode   = "PROVISIONED"
   read_capacity  = 3
   write_capacity = 4
   hash_key       = "UserId"
-  range_key      = "BookTitle"
 
   attributes = [
     {
@@ -122,17 +120,13 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_kms_permissions"></a> [additional\_kms\_permissions](#input\_additional\_kms\_permissions) | Add additional policies for the DDB SSE Key created by this module | `any` | `[]` | no |
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | (Required) List of nested attribute definitions. Only required for hash\_key and range\_key attributes. | `list(map(string))` | `[]` | no |
-| <a name="input_autoscaling_defaults"></a> [autoscaling\_defaults](#input\_autoscaling\_defaults) | A map of default autoscaling settings. | `map(string)` | <pre>{<br>  "scale_in_cooldown": 0,<br>  "scale_out_cooldown": 0,<br>  "target_value": 70<br>}</pre> | no |
+| <a name="input_autoscaling_defaults"></a> [autoscaling\_defaults](#input\_autoscaling\_defaults) | A map of default autoscaling settings. | `map(string)` | <pre>{<br>  "scale_in_cooldown": 0,<br>  "scale_out_cooldown": 0,<br>  "target_value": 50<br>}</pre> | no |
 | <a name="input_autoscaling_indexes"></a> [autoscaling\_indexes](#input\_autoscaling\_indexes) | A map of index autoscaling configurations. See example in examples/autoscaling | `map(map(string))` | `{}` | no |
 | <a name="input_autoscaling_read"></a> [autoscaling\_read](#input\_autoscaling\_read) | A map of read autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling | `map(string)` | `{}` | no |
 | <a name="input_autoscaling_write"></a> [autoscaling\_write](#input\_autoscaling\_write) | A map of write autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling | `map(string)` | `{}` | no |
 | <a name="input_billing_mode"></a> [billing\_mode](#input\_billing\_mode) | (Optional) Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED` | `string` | `"PROVISIONED"` | no |
 | <a name="input_create_dynamodb_item"></a> [create\_dynamodb\_item](#input\_create\_dynamodb\_item) | Specify whether to create dynamodb item | `bool` | `false` | no |
 | <a name="input_create_sse_kms_key"></a> [create\_sse\_kms\_key](#input\_create\_sse\_kms\_key) | Specify whether you want to create the sse\_kms\_key using this module. | `bool` | `false` | no |
-| <a name="input_dynamodb_table_max_read_capacity"></a> [dynamodb\_table\_max\_read\_capacity](#input\_dynamodb\_table\_max\_read\_capacity) | The maximum number of read units for this table. | `number` | `100` | no |
-| <a name="input_dynamodb_table_max_write_capacity"></a> [dynamodb\_table\_max\_write\_capacity](#input\_dynamodb\_table\_max\_write\_capacity) | The maximum number of write units for this table. | `number` | `100` | no |
-| <a name="input_dynamodb_table_min_read_capacity"></a> [dynamodb\_table\_min\_read\_capacity](#input\_dynamodb\_table\_min\_read\_capacity) | The minimum number of read units for this table. | `number` | `5` | no |
-| <a name="input_dynamodb_table_min_write_capacity"></a> [dynamodb\_table\_min\_write\_capacity](#input\_dynamodb\_table\_min\_write\_capacity) | The minimum number of write units for this table. | `number` | `5` | no |
 | <a name="input_enable_autoscaling"></a> [enable\_autoscaling](#input\_enable\_autoscaling) | Determines whether to enable autoscaling for the DynamoDB table. | `bool` | `false` | no |
 | <a name="input_enable_key_rotation"></a> [enable\_key\_rotation](#input\_enable\_key\_rotation) | Specify whether to enable kms key rotation. | `bool` | `true` | no |
 | <a name="input_global_secondary_index"></a> [global\_secondary\_index](#input\_global\_secondary\_index) | Additional global secondary indexes in the form of a list of mapped values. These mapped values are: `hash_key`, `name`, `non_key_attributes`, `projection_type`, `range_key`, `read_capacity` and `write_capacity`. **Note**: For `PAY_PER_REQUEST (On-demand)` mode both `read_capacity` and `write_capacity` are `not applicable`. | `list(any)` | `[]` | no |
@@ -183,5 +177,12 @@ This repository uses third party software:
 * [tflint](https://github.com/terraform-linters/tflint) - Used to lint the Terraform code
   * Install with `brew install tflint`
   * Manually use via pre-commit
+
+### Makefile
+The makefile contain in this repo is optimised for linux paths and the main purpose is to execute testing for now.
+* Create all tests:
+`$ make tests`
+* Clean all tests:
+`$ make clean`
 
 #### BOLDLink-SIG 2022
