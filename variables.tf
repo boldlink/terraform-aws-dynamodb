@@ -189,26 +189,9 @@ variable "timeouts" {
 ############################
 ### DynamoDB Item
 ############################
-variable "table_item_hash_key" {
-  type        = string
-  description = "(Required) Hash key to use for lookups and identification of the item"
-  default     = ""
-}
-
-variable "item_range_key" {
-  type        = string
-  description = "(Optional) Range key to use for lookups and identification of the item. Required if there is range key defined in the table."
-  default     = null
-}
-
-variable "table_item" {
-  type        = string
-  description = "(Required) JSON representation of a map of attribute name/value pairs, one for each attribute. Only the primary key attributes are required; you can optionally provide other attribute name-value pairs for the item."
-  default     = ""
-}
-
-variable "create_dynamodb_item" {
-  type        = bool
-  description = "Specify whether to create dynamodb item"
-  default     = false
+###### Table items fix
+variable "table_items" {
+  type        = any
+  description = "Block for adding table item(s)."
+  default     = {}
 }
