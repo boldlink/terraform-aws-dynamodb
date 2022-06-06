@@ -3,7 +3,8 @@
 [<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>](https://boldlink.io)
 
 # Terraform module example showing dynamodb table with an item
-
+This example with item is more for testing or when you want to create a DDB on dev/qa to run some tests on data.
+*NOTE*: AWS Dynamodb Table Item is **NOT** meant to be used for managing large amounts of data in your table and it is also not designed to scale.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
