@@ -16,14 +16,24 @@ module "table_with_item" {
   ### it is not designed to scale. You should perform regular backups of all data in the table
 
   table_items = {
-    item = <<ITEM
-{
-  "exampleHashKey": {"S": "something"},
-  "one": {"N": "11111"},
-  "two": {"N": "22222"},
-  "three": {"N": "33333"},
-  "four": {"N": "44444"}
-}
-ITEM
+    item = jsonencode(
+      {
+        exampleHashKey = {
+          S = "something"
+        }
+        four = {
+          N = "44444"
+        }
+        one = {
+          N = "11111"
+        }
+        three = {
+          N = "33333"
+        }
+        two = {
+          N = "22222"
+        }
+      }
+    )
   }
 }
