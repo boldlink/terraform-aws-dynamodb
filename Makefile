@@ -1,6 +1,8 @@
 CURRENT_DIR = $(shell pwd)
 EXAMPLES_PATH = $(CURRENT_DIR)/examples/*
+MODULES_PATH = $(CURRENT_DIR)/modules/*
 SUBDIRS := $(shell find $(EXAMPLES_PATH) -maxdepth 0 -type d)
+MODULEDIRS := $(shell find $(MODULES_PATH)/ -maxdepth 0 -type d)
 
 .PHONY: all
 
@@ -25,7 +27,7 @@ tfapply:
 		cd $$folder ;\
 		terraform plan --out=plan.tmp ;\
 		terraform apply plan.tmp ;\
-		rm plan.out ;\
+		rm plan.tmp ;\
 	done
 
 tfdestroy:
@@ -41,6 +43,12 @@ tfclean:
 		rm -rf $$folder/.terraform* ;\
 	done
 
+tfmoduleclean:
+	for folder in $(MODULEDIRS) ; do \
+		echo "[info]: Cleaning $$folder terraform files" ;\
+		rm -rf $$folder/.terraform* .terraform* ;\
+	done
+
 tests: tfinit tfapply
 
-clean: tfdestroy tfclean
+clean: tfdestroy tfclean tfmoduleclean

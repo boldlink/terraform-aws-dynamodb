@@ -4,8 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-- Fix: Error(s) that arise using table item(s).
-- Feature: Table items in example
+## Unreleased
 - Feature: Streams in example
 - Feature: Cloudwatch Contributor Insights for DynamoDB
 - Feature: Support for DDB DAX Cluster accelerator
@@ -14,8 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add: Usage of local secondary index in example(s)
 - Feature: Modify main module to ensure values in gsi/lsi match autoscaling values to avoid inconsistencies.
 
-## [1.1.0] - 2022-05-17
+## [1.1.1] - 2022-06-08
 
+### Changes
+- Fix: Error(s) that arise using table item(s).
+- Feature: Table items in example
+
+
+## [1.1.0] - 2022-05-17
 ### Added
 - Added the `.github/workflow` folder (not supposed to run gitcommit)
 - Re-factored examples (`minimum`, `complete` and additional)

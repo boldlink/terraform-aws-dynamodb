@@ -229,13 +229,10 @@ resource "aws_appautoscaling_policy" "index_write_policy" {
   }
 }
 
-############################
-### DynamoDB Item
-############################
 resource "aws_dynamodb_table_item" "main" {
-  count      = var.create_dynamodb_item ? 1 : 0
+  for_each   = var.table_items
   table_name = aws_dynamodb_table.main.name
-  hash_key   = var.table_item_hash_key == null ? aws_dynamodb_table.main.hash_key : var.table_item_hash_key
-  range_key  = var.item_range_key
-  item       = var.table_item
+  hash_key   = try(var.table_items["hash_key"], aws_dynamodb_table.main.hash_key)
+  range_key  = try(var.table_items["range_key"], null)
+  item       = try(var.table_items["item"], null)
 }
