@@ -89,7 +89,7 @@ module "dynamodb_table" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.17.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.61.0 |
 
 ## Modules
 
