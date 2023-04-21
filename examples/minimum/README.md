@@ -4,6 +4,7 @@
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/release.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pr-labeler.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
+[![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/module-examples-tests.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/checkov.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/auto-badge.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 

@@ -4,6 +4,7 @@
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/release.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/pr-labeler.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
+[![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/module-examples-tests.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/checkov.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 [![Build Status](https://github.com/boldlink/terraform-aws-dynamodb/actions/workflows/auto-badge.yaml/badge.svg)](https://github.com/boldlink/terraform-aws-dynamodb/actions)
 
@@ -26,7 +27,7 @@ with `AWS Managed CMK`. For production, it is recommented that you use a CMK (Cu
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | 4.62.0 |
+| <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | 4.63.0 |
 
 ## Modules
 
