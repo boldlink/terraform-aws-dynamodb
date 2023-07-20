@@ -27,7 +27,7 @@ with `AWS Managed CMK`. For production, it is recommented that you use a CMK (Cu
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | 5.6.2 |
+| <a name="provider_aws.euwest2"></a> [aws.euwest2](#provider\_aws.euwest2) | 5.8.0 |
 
 ## Modules
 
