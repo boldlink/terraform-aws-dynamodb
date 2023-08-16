@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feature: Overwriting the key policy (partially/entirely)
 - Add: Usage of local secondary index in example(s)
 - Feature: Modify main module to ensure values in gsi/lsi match autoscaling values to avoid inconsistencies.
+- fix: CKV_AWS_111 #Ensure IAM policies does not allow write access without constraints
+- fix: CKV_AWS_109 #Ensure IAM policies does not allow permissions management / resource exposure without constraints
+- fix: CKV_AWS_119 #Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK
+- fix: CKV_AWS_356 #"Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions"
+
+
+## [1.1.2] - 2022-08-16
+- fix: added CKV_AWS_356 exception to `.checkov.yaml` file
 
 ## [1.1.1] - 2022-06-08
 
@@ -56,4 +64,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - One example with many features
 - Initial commit
 
+Unreleased]: https://github.com/boldlink/terraform-aws-dynamodb/compare/1.1.2...HEAD
+
+[1.1.2]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.1.2
+[1.1.1]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.1.1
+[1.1.0]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.1.0
+[1.0.1]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.0.1
 [1.0.0]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.0.0
