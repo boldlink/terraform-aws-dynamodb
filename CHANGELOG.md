@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: CKV_AWS_119 #Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK
 - fix: CKV_AWS_356 #"Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions"
 
-## [1.2.0] - 2022-08-16
+## [1.2.0] - 2023-10-05
 - feat: showcased restore option in the complete example
 - feat: added hash_key output
 
