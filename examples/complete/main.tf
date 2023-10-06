@@ -61,8 +61,28 @@ module "complete" {
     }
   ]
 
-  tags = {
-    Name        = "complete-example"
-    Environment = "development"
-  }
+  tags = merge({ "Name" = "restored-ddb-example" }, var.tags)
+}
+
+module "dynamodb_table_restore" {
+  source         = "../../"
+  name           = "restored-ddb-example"
+  read_capacity  = 3
+  write_capacity = 4
+  hash_key       = module.complete.hash_key
+
+  restore_source_name    = module.complete.id
+  restore_to_latest_time = true
+
+  attributes = [
+    {
+      name = "id"
+      type = "N"
+    }
+  ]
+
+  stream_enabled   = true
+  stream_view_type = "NEW_AND_OLD_IMAGES"
+
+  tags = merge({ "Name" = "restored-ddb-example" }, var.tags)
 }

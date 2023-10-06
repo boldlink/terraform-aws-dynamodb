@@ -1,6 +1,4 @@
-############################
 ### DynamoDB table
-############################
 resource "aws_dynamodb_table" "main" {
   name           = local.name
   billing_mode   = var.billing_mode
@@ -108,9 +106,7 @@ resource "aws_kms_alias" "ddbsse" {
   target_key_id = aws_kms_key.ddbsse[0].key_id
 }
 
-######################################
 ### Table Auto scaling
-######################################
 
 ## The minimum capacity has been set to match the read capacity of the table
 resource "aws_appautoscaling_target" "dynamodb_table_read_target" {
@@ -169,10 +165,7 @@ resource "aws_appautoscaling_policy" "table_write_policy" {
   }
 }
 
-######################################
 ### Index Auto scaling
-######################################
-
 resource "aws_appautoscaling_target" "index_read" {
   for_each           = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
   max_capacity       = try(each.value.read_max_capacity, null)

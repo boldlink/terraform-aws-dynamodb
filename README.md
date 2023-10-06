@@ -11,13 +11,43 @@
 
 [<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>](https://boldlink.io)
 
-# AWS DynamoDB Terraform module
+# AWS DynamoDB Terraform Module
 
-## Description
+This Terraform module provides an efficient and secure method to create an AWS DynamoDB table along with its item(s), encapsulating best practices and simplifying the deployment of scalable, serverless NoSQL databases.
 
-This terraform module creates a dynamodb table and item(s)
+## 🚀 Features
 
-Examples available [`here`](https://github.com/boldlink/terraform-aws-dynamodb/tree/main/examples)
+- **Effortless Deployment**: Streamline the creation of DynamoDB tables with predefined configurations and optional item population.
+- **Built-in Encryption**: Support for encryption at rest using AWS Key Management Service (KMS) to protect your data.
+- **Security Compliance**: Adherence to AWS security best practices, scanned for vulnerabilities using Checkov.
+
+## 🌟 Why Use This Module
+
+### Simplified Experience
+
+- **Abstraction of Complexity**: Seamlessly orchestrate the creation of DynamoDB tables and items without delving into the intricacies of individual Terraform resources.
+
+### Comprehensive Documentation
+
+- **Elaborate Examples**: Provides detailed examples that guide you through different use-cases, ensuring ease of use and a smooth learning curve.
+
+### Security and Compliance
+
+- **Encryption Support**: Ensures your data is secure by:
+  - Enabling encryption at rest using AWS KMS.
+  - Automatically creating a KMS key if encryption is specified and a custom key isn’t provided.
+
+- **Adherence to Security Best Practices**: This module:
+  - Follows AWS's best practices for secure and compliant infrastructure as code.
+  - Utilizes [Checkov](https://www.checkov.io/) to scan and mitigate potential vulnerabilities, ensuring your DynamoDB deployment is secure and compliant.
+
+## 🚀 Quick Start
+
+[Insert Quick Start Guide or Basic Usage Example Here]
+
+## 📘 Usage & Examples
+
+Navigate to [examples](./examples) for detailed usage scenarios and module configurations.
 
 ### **Important Points to Note**:
 - These examples use the latest version of this module
@@ -54,7 +84,8 @@ module "abc" {
 
 ```hcl
 module "dynamodb_table" {
-  source         = "../../"
+  source         = "boldlink/dynamodb/aws"
+  version        = "<provide_latest_version_here>
   name           = "minimum-example"
   read_capacity  = 3
   write_capacity = 4
@@ -91,7 +122,7 @@ module "dynamodb_table" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.12.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.20.0 |
 
 ## Modules
 
@@ -160,6 +191,7 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_arn"></a> [arn](#output\_arn) | The arn of the table |
+| <a name="output_hash_key"></a> [hash\_key](#output\_hash\_key) | The hash key of the table |
 | <a name="output_id"></a> [id](#output\_id) | The name of the table |
 | <a name="output_stream_arn"></a> [stream\_arn](#output\_stream\_arn) | The ARN of the Table Stream. Only available when `stream_enabled = true` |
 | <a name="output_stream_label"></a> [stream\_label](#output\_stream\_label) | A timestamp, in ISO 8601 format, for this stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true` |
@@ -180,10 +212,22 @@ This repository uses third party software:
   * Manually use via pre-commit
 
 ### Makefile
-The makefile contain in this repo is optimised for linux paths and the main purpose is to execute testing for now.
-* Create all tests:
-`$ make tests`
-* Clean all tests:
-`$ make clean`
+The makefile contained in this repo is optimized for linux paths and the main purpose is to execute testing for now.
+* Create all tests stacks including any supporting resources:
+```console
+make tests
+```
+* Clean all tests *except* existing supporting resources:
+```console
+make clean
+```
+* Clean supporting resources - this is done separately so you can test your module build/modify/destroy independently.
+```console
+make cleansupporting
+```
+* !!!DANGER!!! Clean the state files from examples and test/supportingResources - use with CAUTION!!!
+```console
+make cleanstatefiles
+```
 
-#### BOLDLink-SIG 2022
+#### BOLDLink-SIG 2023
