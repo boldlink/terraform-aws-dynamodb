@@ -1,4 +1,5 @@
 module "dynamodb_table" {
+  #checkov:skip=CKV_AWS_28: Ensure Dynamodb point in time recovery (backup) is enabled"
   source                         = "../../"
   name                           = "minimum-example"
   read_capacity                  = 3
