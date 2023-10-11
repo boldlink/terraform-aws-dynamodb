@@ -15,37 +15,12 @@
 
 This Terraform module provides an efficient and secure method to create an AWS DynamoDB table along with its item(s), encapsulating best practices and simplifying the deployment of scalable, serverless NoSQL databases.
 
-## 🚀 Features
-
+## Why Use This Module over Standard Resources
 - **Effortless Deployment**: Streamline the creation of DynamoDB tables with predefined configurations and optional item population.
 - **Built-in Encryption**: Support for encryption at rest using AWS Key Management Service (KMS) to protect your data.
 - **Security Compliance**: Adherence to AWS security best practices, scanned for vulnerabilities using Checkov.
 
-## 🌟 Why Use This Module
-
-### Simplified Experience
-
-- **Abstraction of Complexity**: Seamlessly orchestrate the creation of DynamoDB tables and items without delving into the intricacies of individual Terraform resources.
-
-### Comprehensive Documentation
-
-- **Elaborate Examples**: Provides detailed examples that guide you through different use-cases, ensuring ease of use and a smooth learning curve.
-
-### Security and Compliance
-
-- **Encryption Support**: Ensures your data is secure by:
-  - Enabling encryption at rest using AWS KMS.
-  - Automatically creating a KMS key if encryption is specified and a custom key isn’t provided.
-
-- **Adherence to Security Best Practices**: This module:
-  - Follows AWS's best practices for secure and compliant infrastructure as code.
-  - Utilizes [Checkov](https://www.checkov.io/) to scan and mitigate potential vulnerabilities, ensuring your DynamoDB deployment is secure and compliant.
-
-## 🚀 Quick Start
-
-[Insert Quick Start Guide or Basic Usage Example Here]
-
-## 📘 Usage & Examples
+## Usage
 
 Navigate to [examples](./examples) for detailed usage scenarios and module configurations.
 
