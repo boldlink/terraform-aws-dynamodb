@@ -1,16 +1,16 @@
 module "complete" {
-  source             = "../../"
-  name               = "complete-example"
-  hash_key           = "id"
-  range_key          = "title"
-  billing_mode       = "PROVISIONED"
-  read_capacity      = 3 ## 3 strongly consistent read per second, or 6 eventually consistent reads per second
-  write_capacity     = 4 ## 4 writes per second, for an item up to 1 KB in size.
-  enable_autoscaling = true
-  create_sse_kms_key = true
-  sse_enabled        = true
-  stream_enabled     = true
-  stream_view_type   = "NEW_AND_OLD_IMAGES"
+  source                      = "../../"
+  name                        = "complete-example"
+  hash_key                    = "id"
+  range_key                   = "title"
+  billing_mode                = "PROVISIONED"
+  read_capacity               = 3 ## 3 strongly consistent read per second, or 6 eventually consistent reads per second
+  write_capacity              = 4 ## 4 writes per second, for an item up to 1 KB in size.
+  enable_autoscaling          = true
+  create_sse_kms_key          = true
+  sse_enabled                 = true
+  stream_enabled              = true
+  stream_view_type            = "NEW_AND_OLD_IMAGES"
   deletion_protection_enabled = true
 
   ## For both read and write, these values are set like so to allow faster scale out and slow scale down
