@@ -8,6 +8,11 @@ output "id" {
   description = "The name of the table"
 }
 
+output "hash_key" {
+  value       = aws_dynamodb_table.main.hash_key
+  description = "The hash key of the table"
+}
+
 output "stream_arn" {
   value       = aws_dynamodb_table.main.stream_arn
   description = "The ARN of the Table Stream. Only available when `stream_enabled = true`"

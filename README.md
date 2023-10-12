@@ -11,13 +11,18 @@
 
 [<img src="https://avatars.githubusercontent.com/u/25388280?s=200&v=4" width="96"/>](https://boldlink.io)
 
-# AWS DynamoDB Terraform module
+# AWS DynamoDB Terraform Module
 
-## Description
+This Terraform module provides an efficient and secure method to create an AWS DynamoDB table along with its item(s), encapsulating best practices and simplifying the deployment of scalable, serverless NoSQL databases.
 
-This terraform module creates a dynamodb table and item(s)
+## Why Use This Module over Standard Resources
+- **Effortless Deployment**: Streamline the creation of DynamoDB tables with predefined configurations and optional item population.
+- **Built-in Encryption**: Support for encryption at rest using AWS Key Management Service (KMS) to protect your data.
+- **Security Compliance**: Adherence to AWS security best practices, scanned for vulnerabilities using Checkov.
 
-Examples available [`here`](https://github.com/boldlink/terraform-aws-dynamodb/tree/main/examples)
+## Usage
+
+Navigate to [examples](./examples) for detailed usage scenarios and module configurations.
 
 ### **Important Points to Note**:
 - These examples use the latest version of this module
@@ -54,7 +59,8 @@ module "abc" {
 
 ```hcl
 module "dynamodb_table" {
-  source         = "../../"
+  source         = "boldlink/dynamodb/aws"
+  version        = "<provide_latest_version_here>
   name           = "minimum-example"
   read_capacity  = 3
   write_capacity = 4
@@ -91,7 +97,7 @@ module "dynamodb_table" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.12.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.20.1 |
 
 ## Modules
 
@@ -130,12 +136,13 @@ No modules.
 | <a name="input_autoscaling_write"></a> [autoscaling\_write](#input\_autoscaling\_write) | A map of write autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling | `map(string)` | `{}` | no |
 | <a name="input_billing_mode"></a> [billing\_mode](#input\_billing\_mode) | (Optional) Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED` | `string` | `"PROVISIONED"` | no |
 | <a name="input_create_sse_kms_key"></a> [create\_sse\_kms\_key](#input\_create\_sse\_kms\_key) | Specify whether you want to create the sse\_kms\_key using this module. | `bool` | `false` | no |
+| <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | Enables deletion protection for table. Defaults to `false` | `bool` | `false` | no |
 | <a name="input_enable_autoscaling"></a> [enable\_autoscaling](#input\_enable\_autoscaling) | Determines whether to enable autoscaling for the DynamoDB table. | `bool` | `false` | no |
 | <a name="input_enable_key_rotation"></a> [enable\_key\_rotation](#input\_enable\_key\_rotation) | Specify whether to enable kms key rotation. | `bool` | `true` | no |
 | <a name="input_global_secondary_index"></a> [global\_secondary\_index](#input\_global\_secondary\_index) | Additional global secondary indexes in the form of a list of mapped values. These mapped values are: `hash_key`, `name`, `non_key_attributes`, `projection_type`, `range_key`, `read_capacity` and `write_capacity`. **Note**: For `PAY_PER_REQUEST (On-demand)` mode both `read_capacity` and `write_capacity` are `not applicable`. | `list(any)` | `[]` | no |
 | <a name="input_hash_key"></a> [hash\_key](#input\_hash\_key) | (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an `attribute` | `string` | n/a | yes |
 | <a name="input_key_deletion_window"></a> [key\_deletion\_window](#input\_key\_deletion\_window) | The waiting period, specified in number of days. Must be between `7` and `30`inclusive. | `number` | `7` | no |
-| <a name="input_local_secondary_index"></a> [local\_secondary\_index](#input\_local\_secondary\_index) | (Optional, Forces new resource) Describe an LSI on the table; these can only be allocated at creation so you cannot change this definition after you have created the resource. | `map(string)` | `{}` | no |
+| <a name="input_local_secondary_index"></a> [local\_secondary\_index](#input\_local\_secondary\_index) | (Optional, Forces new resource) Describe an LSI on the table; these can only be allocated at creation so you cannot change this definition after you have created the resource. | `list(any)` | `[]` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Required) The name of the table, this needs to be unique within a region. | `string` | n/a | yes |
 | <a name="input_point_in_time_recovery_enabled"></a> [point\_in\_time\_recovery\_enabled](#input\_point\_in\_time\_recovery\_enabled) | Specify whether to enable point-in-time-recovery for the dynamodb table. | `bool` | `true` | no |
 | <a name="input_range_key"></a> [range\_key](#input\_range\_key) | (Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an `attribute` | `string` | `null` | no |
@@ -160,6 +167,7 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_arn"></a> [arn](#output\_arn) | The arn of the table |
+| <a name="output_hash_key"></a> [hash\_key](#output\_hash\_key) | The hash key of the table |
 | <a name="output_id"></a> [id](#output\_id) | The name of the table |
 | <a name="output_stream_arn"></a> [stream\_arn](#output\_stream\_arn) | The ARN of the Table Stream. Only available when `stream_enabled = true` |
 | <a name="output_stream_label"></a> [stream\_label](#output\_stream\_label) | A timestamp, in ISO 8601 format, for this stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true` |
@@ -180,10 +188,22 @@ This repository uses third party software:
   * Manually use via pre-commit
 
 ### Makefile
-The makefile contain in this repo is optimised for linux paths and the main purpose is to execute testing for now.
-* Create all tests:
-`$ make tests`
-* Clean all tests:
-`$ make clean`
+The makefile contained in this repo is optimized for linux paths and the main purpose is to execute testing for now.
+* Create all tests stacks including any supporting resources:
+```console
+make tests
+```
+* Clean all tests *except* existing supporting resources:
+```console
+make clean
+```
+* Clean supporting resources - this is done separately so you can test your module build/modify/destroy independently.
+```console
+make cleansupporting
+```
+* !!!DANGER!!! Clean the state files from examples and test/supportingResources - use with CAUTION!!!
+```console
+make cleanstatefiles
+```
 
-#### BOLDLink-SIG 2022
+#### BOLDLink-SIG 2023

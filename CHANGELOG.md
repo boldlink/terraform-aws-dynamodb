@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: CKV_AWS_119 #Ensure DynamoDB Tables are encrypted using a KMS Customer Managed CMK
 - fix: CKV_AWS_356 #"Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions"
 
+## [1.2.0] - 2023-10-05
+- feat: showcased restore option, ttl, LSI, SSE, stream in the complete example
+- feat: added hash_key output
+- feat: added deletion protection argument
 
 ## [1.1.2] - 2022-08-16
 - fix: added CKV_AWS_356 exception to `.checkov.yaml` file
@@ -64,8 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - One example with many features
 - Initial commit
 
-Unreleased]: https://github.com/boldlink/terraform-aws-dynamodb/compare/1.1.2...HEAD
+Unreleased]: https://github.com/boldlink/terraform-aws-dynamodb/compare/1.2.0...HEAD
 
+[1.2.0]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.2.0
 [1.1.2]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.1.2
 [1.1.1]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.1.1
 [1.1.0]: https://github.com/boldlink/terraform-aws-dynamodb/releases/tag/1.1.0

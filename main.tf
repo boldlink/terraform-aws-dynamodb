@@ -1,13 +1,12 @@
-############################
 ### DynamoDB table
-############################
 resource "aws_dynamodb_table" "main" {
-  name           = local.name
-  billing_mode   = var.billing_mode
-  hash_key       = var.hash_key
-  range_key      = var.range_key
-  write_capacity = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
-  read_capacity  = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+  name                        = local.name
+  billing_mode                = var.billing_mode
+  hash_key                    = var.hash_key
+  range_key                   = var.range_key
+  write_capacity              = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
+  read_capacity               = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+  deletion_protection_enabled = var.deletion_protection_enabled
 
   dynamic "attribute" {
     for_each = var.attributes
@@ -26,12 +25,12 @@ resource "aws_dynamodb_table" "main" {
   }
 
   dynamic "local_secondary_index" {
-    for_each = length(keys(var.local_secondary_index)) == 0 ? [] : [var.local_secondary_index]
+    for_each = var.local_secondary_index
     content {
       name               = local_secondary_index.value.name
       range_key          = local_secondary_index.value.range_key
       projection_type    = local_secondary_index.value.projection_type
-      non_key_attributes = lookup(local_secondary_index.value, "non_key_attributes", null)
+      non_key_attributes = try(local_secondary_index.value.non_key_attributes, [])
     }
   }
 
@@ -108,9 +107,7 @@ resource "aws_kms_alias" "ddbsse" {
   target_key_id = aws_kms_key.ddbsse[0].key_id
 }
 
-######################################
 ### Table Auto scaling
-######################################
 
 ## The minimum capacity has been set to match the read capacity of the table
 resource "aws_appautoscaling_target" "dynamodb_table_read_target" {
@@ -169,10 +166,7 @@ resource "aws_appautoscaling_policy" "table_write_policy" {
   }
 }
 
-######################################
 ### Index Auto scaling
-######################################
-
 resource "aws_appautoscaling_target" "index_read" {
   for_each           = var.billing_mode == "PROVISIONED" && var.enable_autoscaling ? var.autoscaling_indexes : {}
   max_capacity       = try(each.value.read_max_capacity, null)

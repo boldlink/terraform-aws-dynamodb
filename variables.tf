@@ -121,9 +121,15 @@ variable "ttl" {
 }
 
 variable "local_secondary_index" {
-  type        = map(string)
+  type        = list(any)
   description = "(Optional, Forces new resource) Describe an LSI on the table; these can only be allocated at creation so you cannot change this definition after you have created the resource."
-  default     = {}
+  default     = []
+}
+
+variable "deletion_protection_enabled" {
+  type        = bool
+  description = "Enables deletion protection for table. Defaults to `false`"
+  default     = false
 }
 
 variable "global_secondary_index" {
